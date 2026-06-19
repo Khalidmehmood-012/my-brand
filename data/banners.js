@@ -5,7 +5,7 @@ const banners = [
     subtitle: 'Street Style Redefined',
     buttonText: 'Shop Now',
     buttonLink: '/shop',
-    image: '/images/banners/hero1.jpg',
+    image: 'https://placehold.co/1400x600/111111/ffffff?text=New+Collection',
   },
   {
     id: '2',
@@ -13,7 +13,7 @@ const banners = [
     subtitle: 'Flat 30% Off on Selected Items',
     buttonText: 'Shop Sale',
     buttonLink: '/sale',
-    image: '/images/banners/hero2.jpg',
+    image: 'https://placehold.co/1400x600/222222/ffffff?text=Summer+Sale',
   },
 ]
 

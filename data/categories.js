@@ -3,19 +3,19 @@ const categories = [
     id: '1',
     name: 'T-Shirts',
     slug: 'tshirts',
-    image: '/images/banners/tshirts.jpg',
+    image: 'https://placehold.co/600x600/f3f4f6/000000?text=T-Shirts',
   },
   {
     id: '2',
     name: 'Hoodies',
     slug: 'hoodies',
-    image: '/images/banners/hoodies.jpg',
+    image: 'https://placehold.co/600x600/f3f4f6/000000?text=Hoodies',
   },
   {
     id: '3',
     name: 'Accessories',
     slug: 'accessories',
-    image: '/images/banners/accessories.jpg',
+    image: 'https://placehold.co/600x600/f3f4f6/000000?text=Accessories',
   },
 ]
 
