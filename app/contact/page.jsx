@@ -57,7 +57,7 @@ export default function ContactPage() {
             { icon: '🕐', title: 'Working Hours', info: 'Mon - Sat: 9am - 6pm' },
           ].map((item) => (
             <div key={item.title} className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-black text-white rounded-xl flex items-center justify-center text-xl flex-shrink-0">
+              <div className="w-12 h-12 bg-black text-white rounded-xl flex items-center justify-center text-xl shrink-0">
                 {item.icon}
               </div>
               <div>

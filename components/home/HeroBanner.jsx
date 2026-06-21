@@ -15,7 +15,7 @@ export default function HeroBanner() {
   }, [])
 
   return (
-    <div className="relative w-full h-[500px] md:h-[600px] overflow-hidden bg-gray-900">
+    <div className="relative w-full h-125 md:h-150 overflow-hidden bg-gray-900">
 
       {/* Slides */}
       {banners.map((banner, index) => (

@@ -253,7 +253,7 @@ export default function Navbar() {
                       onClick={closeSearch}
                       className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition"
                     >
-                      <div className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                      <div className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden shrink-0">
                         <img
                           src={product.image}
                           alt={product.name}

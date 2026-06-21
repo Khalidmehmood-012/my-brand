@@ -41,7 +41,7 @@ export default function ProfilePage() {
       <div className="bg-black text-white rounded-2xl p-8 flex flex-col sm:flex-row items-center gap-6 mb-8">
 
         {/* Avatar */}
-        <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-700 flex-shrink-0">
+        <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-700 shrink-0">
           {user.photo ? (
             <img
               src={user.photo}
