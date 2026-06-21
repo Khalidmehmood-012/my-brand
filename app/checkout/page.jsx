@@ -193,7 +193,7 @@ export default function CheckoutPage() {
               Payment Method
             </h3>
             <div className="flex items-center gap-3">
-              <div className="w-4 h-4 rounded-full bg-black flex-shrink-0" />
+              <div className="w-4 h-4 rounded-full bg-black shrink-0" />
               <p className="text-sm font-semibold">Cash on Delivery (COD)</p>
             </div>
           </div>
@@ -201,7 +201,7 @@ export default function CheckoutPage() {
         </div>
 
         {/* Right — Order Summary */}
-        <div className="w-full lg:w-80 flex-shrink-0">
+        <div className="w-full lg:w-80 shrink-0">
           <div className="border border-gray-200 rounded-2xl p-6 sticky top-24">
             <h2 className="font-bold uppercase tracking-widest text-sm border-b pb-3 mb-4">
               Order Summary

@@ -7,7 +7,6 @@ import banners from '@/data/banners'
 export default function HeroBanner() {
   const [current, setCurrent] = useState(0)
 
-  // Auto slide every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % banners.length)
@@ -16,7 +15,7 @@ export default function HeroBanner() {
   }, [])
 
   return (
-    <div className="relative w-full h-125 md:h-150 overflow-hidden bg-gray-900">
+    <div className="relative w-full h-[500px] md:h-[600px] overflow-hidden bg-gray-900">
 
       {/* Slides */}
       {banners.map((banner, index) => (
@@ -26,17 +25,12 @@ export default function HeroBanner() {
             index === current ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          {/* Background Image */}
           <img
             src={banner.image}
             alt={banner.title}
             className="w-full h-full object-cover"
           />
-
-          {/* Overlay */}
           <div className="absolute inset-0 bg-black bg-opacity-40" />
-
-          {/* Content */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
             <p className="text-sm uppercase tracking-widest mb-2 text-gray-300">
               {banner.subtitle}
@@ -55,32 +49,36 @@ export default function HeroBanner() {
       ))}
 
       {/* Dots */}
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
         {banners.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrent(index)}
-            className={`w-2 h-2 rounded-full transition ${
-              index === current ? 'bg-white w-6' : 'bg-white bg-opacity-50'
+            className={`h-2 rounded-full transition-all duration-300 ${
+              index === current ? 'bg-white w-6' : 'bg-white bg-opacity-50 w-2'
             }`}
           />
         ))}
       </div>
 
-      {/* Prev / Next Arrows */}
+      {/* Prev Arrow */}
       <button
-        onClick={() =>
-          setCurrent((prev) => (prev - 1 + banners.length) % banners.length)
-        }
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white w-10 h-10 rounded-full flex items-center justify-center transition"
+        onClick={() => setCurrent((prev) => (prev - 1 + banners.length) % banners.length)}
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white text-black rounded-full flex items-center justify-center shadow-lg"
       >
-        ‹
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
       </button>
+
+      {/* Next Arrow */}
       <button
         onClick={() => setCurrent((prev) => (prev + 1) % banners.length)}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white w-10 h-10 rounded-full flex items-center justify-center transition"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white text-black rounded-full flex items-center justify-center shadow-lg"
       >
-        ›
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
       </button>
 
     </div>
