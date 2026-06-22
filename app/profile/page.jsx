@@ -10,8 +10,11 @@ export default function ProfilePage() {
   const { user, loading, logout, initAuth } = useAuthStore()
 
   useEffect(() => {
-    initAuth()
-  }, [])
+  const unsubscribe = initAuth()
+  return () => {
+    if (typeof unsubscribe === 'function') unsubscribe()
+  }
+}, [])
 
   useEffect(() => {
     if (!loading && !user) {

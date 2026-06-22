@@ -5,7 +5,7 @@ const banners = [
     subtitle: 'Street Style Redefined',
     buttonText: 'Shop Now',
     buttonLink: '/shop',
-    image: 'https://placehold.co/1400x600/111111/ffffff?text=New+Collection',
+    image: 'https://static.vecteezy.com/system/resources/thumbnails/011/911/023/small/full-street-fashion-slender-figure-beautiful-face-graceful-girl-sitting-on-isolated-white-background-portrait-of-female-model-in-studio-plastic-surgery-and-aesthetic-cosmetology-free-photo.jpg',
   },
   {
     id: '2',
@@ -13,7 +13,7 @@ const banners = [
     subtitle: 'Flat 30% Off on Selected Items',
     buttonText: 'Shop Sale',
     buttonLink: '/sale',
-    image: 'https://placehold.co/1400x600/222222/ffffff?text=Summer+Sale',
+    image: 'https://static.vecteezy.com/system/resources/thumbnails/011/911/026/small/full/street',
   },
 ]
 

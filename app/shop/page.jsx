@@ -38,7 +38,7 @@ export default function ShopPage() {
       <div className="flex flex-col md:flex-row gap-8">
 
         {/* Filter Sidebar */}
-        <div className="w-full md:w-48 flex-shrink-0">
+        <div className="w-full md:w-48 shrink-0">
           <ProductFilter
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
