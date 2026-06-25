@@ -5,7 +5,7 @@ const banners = [
     subtitle: 'Street Style Redefined',
     buttonText: 'Shop Now',
     buttonLink: '/shop',
-    image: 'https://static.vecteezy.com/system/resources/thumbnails/011/911/023/small/full-street-fashion-slender-figure-beautiful-face-graceful-girl-sitting-on-isolated-white-background-portrait-of-female-model-in-studio-plastic-surgery-and-aesthetic-cosmetology-free-photo.jpg',
+    image: '/images/banners/banner2.jpg',
   },
   {
     id: '2',
@@ -13,7 +13,7 @@ const banners = [
     subtitle: 'Flat 30% Off on Selected Items',
     buttonText: 'Shop Sale',
     buttonLink: '/sale',
-    image: 'https://static.vecteezy.com/system/resources/thumbnails/011/911/026/small/full/street',
+    image: '/images/banners/banner3.jpg',
   },
 ]
 

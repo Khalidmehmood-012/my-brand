@@ -39,16 +39,16 @@ export default function ProductCard({ product }) {
       {/* Info */}
       <div className="p-4">
         <Link href={`/products/${product.slug}`}>
-          <h3 className="font-semibold text-sm hover:underline line-clamp-2">
+          <h3 className="font-semibold text-sm hover:underline line-clamp-2 text-black">
             {product.name}
           </h3>
         </Link>
 
         {/* Price */}
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-sm font-bold">Rs. {product.price}</p>
+          <p className="text-sm font-bold text-black">Rs. {product.price}</p>
           {product.originalPrice > product.price && (
-            <p className="text-xs text-gray-400 line-through">
+            <p className="text-xs text-gray-500 line-through">
               Rs. {product.originalPrice}
             </p>
           )}

@@ -1,16 +1,21 @@
 const products = [
-  {
-    id: '1',
-    name: 'Classic Black Oversized Tee',
-    price: 1500,
-    originalPrice: 2000,
-    image: 'https://placehold.co/400x400/f3f4f6/000000?text=Black+Tee',
-    slug: 'classic-black-oversized-tee',
-    category: 'tshirts',
-    badge: 'NEW IN',
-    sizes: ['S', 'M', 'L', 'XL'],
-    description: 'Premium quality oversized t-shirt for everyday wear.',
-  },
+ {
+  id: '1',
+  name: 'Classic Black Oversized Tee',
+  price: 1500,
+  originalPrice: 2000,
+  image: '/images/banners/hero1.jpg',
+  images: [
+    '/images/banners/T1.jpg',
+    '/images/banners/A1.jpg',
+    '/images/products/tee1.jpg',
+  ],
+  slug: 'classic-black-oversized-tee',
+  category: 'tshirts',
+  badge: 'NEW IN',
+  sizes: ['S', 'M', 'L', 'XL'],
+  description: 'Premium quality oversized t-shirt for everyday wear.',
+},
   {
     id: '2',
     name: 'Urban Street Hoodie',

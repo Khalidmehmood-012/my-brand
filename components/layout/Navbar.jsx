@@ -103,7 +103,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="text-2xl font-bold tracking-widest uppercase text-black">
-            MyBrand
+            Komrez
           </Link>
 
           {/* Nav Links — Desktop */}
