@@ -74,7 +74,7 @@ export default function CartPage() {
                   className="flex gap-5 p-5 bg-white border border-gray-100 rounded-3xl hover:shadow-md transition-shadow duration-200"
                 >
                   {/* Image */}
-                  <div className="w-28 h-28 bg-gray-50 rounded-2xl overflow-hidden flex-shrink-0">
+                  <div className="w-28 h-28 bg-gray-50 rounded-2xl overflow-hidden shrink-0">
                     <img
                       src={item.image}
                       alt={item.name}
@@ -142,7 +142,7 @@ export default function CartPage() {
             </div>
 
             {/* Order Summary */}
-            <div className="w-full lg:w-96 flex-shrink-0">
+            <div className="w-full lg:w-96 shrink-0">
               <div className="border border-gray-100 rounded-3xl p-8 bg-white shadow-sm sticky top-24">
 
                 <h2 className="text-xl font-black uppercase tracking-widest text-black mb-6">
