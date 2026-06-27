@@ -27,15 +27,15 @@ export default function Navbar() {
     initAuth()
   }, [])
 
-  const handleMouseEnter = (slug) => {
+  const handleMouseEnter = (label) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    setActiveMenu(slug)
+    setActiveMenu(label)
   }
 
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setActiveMenu(null)
-    }, 100)
+    }, 150)
   }
 
   const handleSearch = (query) => {
@@ -61,39 +61,39 @@ export default function Navbar() {
     {
       label: 'Home',
       href: '/',
-      slug: null,
       columns: [],
       images: [],
     },
     {
-      label: 'T-Shirts',
+      label: 'Women',
+      href: '/collections/women-tshirts',
+      ...megaMenuData.women,
+    },
+    {
+      label: 'Men',
       href: '/collections/tshirts',
-      slug: 'tshirts',
-      ...megaMenuData.tshirts,
+      ...megaMenuData.men,
     },
     {
       label: 'Hoodies',
       href: '/collections/hoodies',
-      slug: 'hoodies',
       ...megaMenuData.hoodies,
     },
     {
       label: 'Accessories',
       href: '/collections/accessories',
-      slug: 'accessories',
       ...megaMenuData.accessories,
     },
     {
       label: 'Sale',
       href: '/sale',
-      slug: 'sale',
       ...megaMenuData.sale,
     },
   ]
 
   const isActive = (item) => {
     if (item.href === '/') return pathname === '/'
-    return pathname === item.href || pathname.startsWith(`/collections/${item.slug}`)
+    return pathname.startsWith(item.href)
   }
 
   return (
@@ -112,13 +112,13 @@ export default function Navbar() {
               <div
                 key={item.label}
                 className="relative h-full flex items-center"
-                onMouseEnter={() => handleMouseEnter(item.slug)}
+                onMouseEnter={() => handleMouseEnter(item.label)}
                 onMouseLeave={handleMouseLeave}
               >
                 <Link
                   href={item.href}
                   className={`text-sm font-semibold uppercase tracking-wide transition-all border-b-2 pb-1 ${
-                    isActive(item) || activeMenu === item.slug
+                    isActive(item) || activeMenu === item.label
                       ? 'border-black text-black'
                       : 'border-transparent'
                   } ${
@@ -131,10 +131,10 @@ export default function Navbar() {
                 </Link>
 
                 {/* Mega Menu */}
-                {activeMenu === item.slug && item.columns && item.columns.length > 0 && (
+                {activeMenu === item.label && item.columns && item.columns.length > 0 && (
                   <MegaMenu
                     item={item}
-                    onMouseEnter={() => handleMouseEnter(item.slug)}
+                    onMouseEnter={() => handleMouseEnter(item.label)}
                     onMouseLeave={handleMouseLeave}
                   />
                 )}
@@ -159,7 +159,7 @@ export default function Navbar() {
               </svg>
             </button>
 
-            {/* Profile Icon — Direct Link */}
+            {/* Profile Icon */}
             {user ? (
               <Link href="/profile" className="text-black hover:text-gray-500 transition">
                 {user?.photo ? (
@@ -261,7 +261,7 @@ export default function Navbar() {
                         />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold">{product.name}</p>
+                        <p className="text-sm font-semibold text-black">{product.name}</p>
                         <p className="text-xs text-gray-400">Rs. {product.price}</p>
                       </div>
                       <span className="ml-auto text-xs text-gray-400 uppercase">
@@ -338,5 +338,3 @@ export default function Navbar() {
     </>
   )
 }
-
-

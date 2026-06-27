@@ -1,4 +1,76 @@
 const megaMenuData = {
+  women: {
+    columns: [
+      {
+        heading: 'T-Shirts',
+        links: [
+          { name: 'All Women T-Shirts', href: '/collections/women-tshirts' },
+          { name: 'Graphic Tees', href: '/collections/women-tshirts', badge: 'NEW' },
+          { name: 'Oversized Tees', href: '/collections/women-tshirts' },
+          { name: 'Crop Tops', href: '/collections/women-tshirts' },
+          { name: 'Half Sleeve', href: '/collections/women-tshirts' },
+        ],
+      },
+      {
+        heading: 'Hoodies',
+        links: [
+          { name: 'All Women Hoodies', href: '/collections/women-hoodies' },
+          { name: 'Pullover', href: '/collections/women-hoodies', badge: 'NEW' },
+          { name: 'Zip Hoodie', href: '/collections/women-hoodies' },
+          { name: 'Oversized Hoodie', href: '/collections/women-hoodies' },
+        ],
+      },
+      {
+        heading: 'Accessories',
+        links: [
+          { name: 'All Accessories', href: '/collections/accessories' },
+          { name: 'Caps', href: '/collections/accessories' },
+          { name: 'Tote Bags', href: '/collections/accessories' },
+        ],
+      },
+    ],
+    images: [
+      { src: '/images/banners/women.jpg', label: 'New In', href: '/collections/women-tshirts' },
+      { src: '/images/banners/women.jpg', label: 'Shop Women', href: '/collections/women-hoodies' },
+    ],
+  },
+
+  men: {
+    columns: [
+      {
+        heading: 'T-Shirts',
+        links: [
+          { name: 'All Men T-Shirts', href: '/collections/tshirts' },
+          { name: 'Full Shirt', href: '/collections/tshirts', badge: 'NEW' },
+          { name: 'Half Shirt', href: '/collections/tshirts' },
+          { name: 'Polo Shirt', href: '/collections/tshirts' },
+          { name: 'Oversized Tee', href: '/collections/tshirts' },
+        ],
+      },
+      {
+        heading: 'Hoodies',
+        links: [
+          { name: 'All Men Hoodies', href: '/collections/hoodies' },
+          { name: 'Pullover', href: '/collections/hoodies', badge: 'NEW' },
+          { name: 'Zip Hoodie', href: '/collections/hoodies' },
+          { name: 'Oversized Hoodie', href: '/collections/hoodies' },
+        ],
+      },
+      {
+        heading: 'Accessories',
+        links: [
+          { name: 'All Accessories', href: '/collections/accessories' },
+          { name: 'Caps', href: '/collections/accessories' },
+          { name: 'Backpacks', href: '/collections/accessories' },
+        ],
+      },
+    ],
+    images: [
+      { src: '/images/banners/men.jpg', label: 'New In', href: '/collections/tshirts' },
+      { src: '/images/banners/men.jpg', label: 'Shop Men', href: '/collections/hoodies' },
+    ],
+  },
+
   tshirts: {
     columns: [
       {
@@ -45,6 +117,7 @@ const megaMenuData = {
           { name: 'Pullover Hoodies', href: '/collections/hoodies', badge: 'NEW' },
           { name: 'Zip Up Hoodies', href: '/collections/hoodies' },
           { name: 'Oversized Hoodies', href: '/collections/hoodies' },
+          { name: 'Sleeveless', href: '/collections/hoodies' },
         ],
       },
       {
@@ -57,7 +130,6 @@ const megaMenuData = {
         ],
       },
     ],
-    // Hoodies pe sirf 2 columns, koi image nahi
     images: [],
   },
 
@@ -115,7 +187,6 @@ const megaMenuData = {
         ],
       },
     ],
-    // Sale pe koi image nahi — sirf chhota dropdown
     images: [],
   },
 }
