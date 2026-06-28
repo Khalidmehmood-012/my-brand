@@ -5,98 +5,97 @@ export default function CategoryGrid() {
     {
       id: '1',
       name: 'Women',
-      slug: 'women-tshirts',
-      image: '/images/banners/women.jpg',
-      description: 'Explore Women Collection',
+      slug: 'women',
+      image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop',
+      description: 'Discover Elegance',
+      color: 'from-pink-500/40',
     },
     {
       id: '2',
       name: 'Men',
-      slug: 'tshirts',
-      image: '/images/banners/men.jpg',
-      description: 'Explore Men Collection',
-    },
-  ]
-
-  const categories = [
-    {
-      id: '3',
-      name: 'T-Shirts',
-      slug: 'tshirts',
-      image: '/images/banners/tshirts.jpg',
-    },
-    {
-      id: '4',
-      name: 'Hoodies',
-      slug: 'hoodies',
-      image: '/images/banners/hoodies.jpg',
-    },
-    {
-      id: '5',
-      name: 'Accessories',
-      slug: 'accessories',
-      image: '/images/banners/accessories.jpg',
+      slug: 'men',
+      image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&h=600&fit=crop',
+      description: 'Define Your Style',
+      color: 'from-blue-500/40',
     },
   ]
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-16">
+    <section className="max-w-7xl mx-auto px-4 py-20">
 
-      {/* Heading */}
-      <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-black uppercase tracking-widest text-black">
-          Shop By Gender
+      {/* Heading with Animation - WHITE TEXT */}
+      <div className="text-center mb-14">
+        <div className="inline-block">
+          <span className="text-xs font-black uppercase tracking-[0.3em] text-gray-300 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
+            Collection 2024
+          </span>
+        </div>
+        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight text-white mt-4 drop-shadow-lg">
+          Choose Your <span className="text-white">Style</span>
         </h2>
-        <p className="text-gray-400 text-sm mt-2">Find your perfect style</p>
+        <p className="text-white/70 text-sm mt-3 max-w-md mx-auto drop-shadow-md">
+          Find your perfect fit from our premium collections
+        </p>
       </div>
 
-      {/* Women & Men — 2 Big Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-        {genders.map((gender) => (
+      {/* Women & Men — Modern Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {genders.map((gender, index) => (
           <Link
             key={gender.id}
             href={`/collections/${gender.slug}`}
-            className="group relative rounded-3xl overflow-hidden bg-black border-2 border-black hover:shadow-2xl transition-all duration-300 h-80"
+            className={`group relative rounded-3xl overflow-hidden bg-black transform transition-all duration-700 hover:scale-[1.02] hover:shadow-2xl ${
+              index === 0 ? 'md:-translate-y-4' : 'md:translate-y-4'
+            }`}
           >
-            <img
-              src={gender.image}
-              alt={gender.name}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80"
-            />
-            <div className="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-8">
-              <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-white mb-2">
-                {gender.name}
-              </h3>
-              <p className="text-gray-300 text-sm mb-4">{gender.description}</p>
-              <span className="inline-block text-xs font-black uppercase tracking-widest border-2 border-white text-white px-6 py-2 rounded-full group-hover:bg-white group-hover:text-black transition-all duration-300">
-                Shop Now →
-              </span>
-            </div>
-          </Link>
-        ))}
-      </div>
+            {/* Image with Zoom */}
+            <div className="relative h-112.5 md:h-125 overflow-hidden">
+              <img
+                src={gender.image}
+                alt={gender.name}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              
+              {/* Gradient Overlay */}
+              <div className={`absolute inset-0 bg-linear-to-t ${gender.color} via-black/30 to-transparent`} />
+              
+              {/* Pattern Overlay */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl" />
+              </div>
 
-      {/* Categories — 3 Small Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {categories.map((category) => (
-          <Link
-            key={category.id}
-            href={`/collections/${category.slug}`}
-            className="group relative rounded-2xl overflow-hidden bg-black border border-gray-200 hover:shadow-xl transition-all duration-300 h-48"
-          >
-            <img
-              src={category.image}
-              alt={category.name}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80"
-            />
-            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-300" />
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-              <h3 className="text-2xl font-black uppercase tracking-widest">
-                {category.name}
-              </h3>
-              <span className="mt-2 text-xs font-bold uppercase tracking-widest border border-white px-4 py-1 rounded-full group-hover:bg-white group-hover:text-black transition-all duration-300">
-                Shop Now
+              {/* Content */}
+              <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+                {/* Badge */}
+                <div className="inline-block mb-4 px-4 py-1.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
+                    {index === 0 ? '✦ New Collection' : '★ Best Sellers'}
+                  </span>
+                </div>
+
+                <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tight text-white mb-3 drop-shadow-lg">
+                  {gender.name}
+                </h3>
+                
+                <p className="text-white/80 text-sm md:text-base mb-6 max-w-xs drop-shadow-md">
+                  {gender.description}
+                </p>
+
+                {/* Animated Button */}
+                <div className="inline-flex items-center gap-3 px-8 py-3.5 bg-white text-black rounded-full font-bold text-sm uppercase tracking-widest transition-all duration-300 group-hover:bg-black group-hover:text-white group-hover:scale-105 hover:shadow-2xl">
+                  <span>Shop Now</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating Stats */}
+            <div className="absolute top-6 right-6 flex flex-col items-end gap-2">
+              <span className="text-white/60 text-xs font-bold uppercase tracking-wider bg-black/30 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                {index === 0 ? '150+ Styles' : '120+ Styles'}
               </span>
             </div>
           </Link>
