@@ -5,6 +5,7 @@ export default function ProductFilter({
   setSelectedCategory,
   selectedSize,
   setSelectedSize,
+  
 }) {
   const categories = [
     { label: 'All', value: 'all' },
