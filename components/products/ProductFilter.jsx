@@ -5,7 +5,6 @@ export default function ProductFilter({
   setSelectedCategory,
   selectedSize,
   setSelectedSize,
-  
 }) {
   const categories = [
     { label: 'All', value: 'all' },
@@ -14,48 +13,50 @@ export default function ProductFilter({
     { label: 'Accessories', value: 'accessories' },
   ]
 
-  const sizes = ['All', 'S', 'M', 'L', 'XL']
+  const sizes = ['All', 'XS', 'S', 'M', 'L', 'XL', 'XXL']
 
   return (
-    <div className="flex flex-col gap-6">
-
-      {/* Category Filter */}
-      <div>
-        <h3 className="text-sm font-bold uppercase tracking-widest mb-3">
+    <div className="bg-gray-50 rounded-2xl p-4 md:p-6 border border-gray-100">
+      
+      {/* Category */}
+      <div className="flex flex-wrap items-center gap-3 mb-4">
+        <span className="text-xs font-black uppercase tracking-widest text-gray-400 w-full sm:w-auto">
           Category
-        </h3>
-        <ul className="flex flex-col gap-2">
+        </span>
+        <div className="flex flex-wrap gap-2">
           {categories.map((cat) => (
-            <li key={cat.value}>
-              <button
-                onClick={() => setSelectedCategory(cat.value)}
-                className={`text-sm transition ${
-                  selectedCategory === cat.value
-                    ? 'font-bold text-black'
-                    : 'text-gray-400 hover:text-black'
-                }`}
-              >
-                {cat.label}
-              </button>
-            </li>
+            <button
+              key={cat.value}
+              onClick={() => setSelectedCategory(cat.value)}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+                selectedCategory === cat.value
+                  ? 'bg-black text-white shadow-lg scale-105'
+                  : 'bg-white text-gray-500 hover:bg-gray-200 hover:text-black border border-gray-200'
+              }`}
+            >
+              {cat.label}
+            </button>
           ))}
-        </ul>
+        </div>
       </div>
 
-      {/* Size Filter */}
-      <div>
-        <h3 className="text-sm font-bold uppercase tracking-widest mb-3">
+      {/* Divider */}
+      <div className="h-px bg-gray-200 my-4" />
+
+      {/* Size */}
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-xs font-black uppercase tracking-widest text-gray-400 w-full sm:w-auto">
           Size
-        </h3>
+        </span>
         <div className="flex flex-wrap gap-2">
           {sizes.map((size) => (
             <button
               key={size}
               onClick={() => setSelectedSize(size)}
-              className={`w-10 h-10 border rounded-lg text-sm font-semibold transition ${
+              className={`w-9 h-9 rounded-full text-xs font-bold uppercase transition-all duration-200 ${
                 selectedSize === size
-                  ? 'bg-black text-white border-black'
-                  : 'text-gray-500 border-gray-300 hover:border-black hover:text-black'
+                  ? 'bg-black text-white shadow-lg scale-105'
+                  : 'bg-white text-gray-500 hover:bg-gray-200 hover:text-black border border-gray-200'
               }`}
             >
               {size}
@@ -63,6 +64,17 @@ export default function ProductFilter({
           ))}
         </div>
       </div>
+
+      {/* Clear Filters */}
+      <button
+        onClick={() => {
+          setSelectedCategory('all')
+          setSelectedSize('All')
+        }}
+        className="w-full mt-5 text-xs font-bold uppercase tracking-widest text-gray-400  transition-colors py-2.5 border border-gray-200 rounded-xl hover:border-black hover:bg-black hover:text-white"
+      >
+        Clear All Filters
+      </button>
 
     </div>
   )
