@@ -9,7 +9,7 @@ export default function MegaMenu({ item, onMouseEnter, onMouseLeave }) {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       className="fixed left-0 right-0 bg-white border-b border-gray-200 shadow-xl z-50"
-      style={{ top: '100px' }}
+      style={{ top: '64px' }}
     >
       <div className="max-w-7xl mx-auto px-8 py-8">
         <div className="flex gap-12">

@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={geist.className}>
-        <AnnouncementBar />
+        {/* <AnnouncementBar /> */}
         <Navbar />
         <main>{children}</main>
         <Footer />

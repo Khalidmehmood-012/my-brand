@@ -24,11 +24,16 @@ export default function CollectionPage({ params }) {
     accessories: ['All', 'Caps', 'Tote Bags', 'Backpacks', 'Socks'],
   }
 
-  const filtered = products.filter((p) => {
-    const categoryMatch = p.category === category
-    const subMatch = selectedSub === 'All' || p.subcategory === selectedSub
-    return categoryMatch && subMatch
-  })
+ const filtered = products.filter((p) => {
+  const categoryMatch =
+    (category === 'women-tshirts' && p.category === 'tshirts' && p.gender === 'women') ||
+    (category === 'women-hoodies' && p.category === 'hoodies' && p.gender === 'women') ||
+    (category === 'tshirts' && p.category === 'tshirts' && p.gender === 'men') ||
+    (category === 'hoodies' && p.category === 'hoodies' && p.gender === 'men') ||
+    (category === 'accessories' && p.category === 'accessories')
+  const subMatch = selectedSub === 'All' || p.subcategory === selectedSub
+  return categoryMatch && subMatch
+})
 
   return (
     <div className="bg-white min-h-screen">
