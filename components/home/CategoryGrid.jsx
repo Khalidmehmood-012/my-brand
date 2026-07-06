@@ -131,7 +131,7 @@ export default function CategoryGrid() {
   return (
     <section 
       id="category-grid" 
-      className="max-w-7xl mx-auto px-4 py-20 scroll-mt-16"
+      className="max-w-7xl mx-auto px-4 py-20 scroll-mt-16 bg-black"
     >
 
       {/* Heading with Animation - WHITE TEXT */}
