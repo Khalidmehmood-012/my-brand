@@ -19,8 +19,9 @@ export default function CartDrawer({ open, onClose }) {
       {/* Overlay */}
       {open && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-40 z-40"
-          onClick={onClose}
+         className="fixed inset-0 z-50"
+        style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }} // ← Light opacity
+        onClick={onClose}
         />
       )}
 

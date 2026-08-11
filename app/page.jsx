@@ -3,6 +3,7 @@ import CategoryGrid from '@/components/home/CategoryGrid'
 import FeaturedProducts from '@/components/home/FeaturedProducts'
 import PromoSection from '@/components/home/PromoSection'
 import NewsletterSection from '@/components/home/NewsletterSection'
+import WhatsAppButton from '@/components/ui/WhatsAppButton'
 
 export default function HomePage() {
   return (
@@ -21,6 +22,8 @@ export default function HomePage() {
 
       {/* Newsletter */}
       <NewsletterSection />
+
+      <WhatsAppButton />
     </div>
   )
 }
