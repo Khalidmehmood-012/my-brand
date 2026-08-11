@@ -51,7 +51,7 @@ export default function CartPage() {
               Nothing here yet!
             </p>
             <p className="text-gray-400 text-sm mb-8">
-              Looks like you haven't added anything to your cart.
+              Looks like you haven’t added anything to your cart.
             </p>
             <Link
               href="/shop"

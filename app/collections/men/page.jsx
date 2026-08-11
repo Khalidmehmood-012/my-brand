@@ -54,7 +54,7 @@ export default function MenPage() {
             </div>
 
             <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tight text-white leading-[1.05]">
-              Men's
+              Men’s
               <span className="block text-transparent bg-clip-text bg-linear-to-r from-white to-gray-400">
                 Style
               </span>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { use } from 'react'
-import { notFound } from 'next/navigation'
+import { notFound, useRouter } from 'next/navigation'
 import products from '@/data/products'
 import Breadcrumb from '@/components/ui/Breadcrumb'
 import Badge from '@/components/ui/Badge'
@@ -10,6 +10,7 @@ import ProductGrid from '@/components/products/ProductGrid'
 import useCartStore from '@/lib/store'
 
 export default function ProductDetailPage({ params }) {
+  const router = useRouter()
   const { slug } = use(params)
   const product = products.find((p) => p.slug === slug)
   const [selectedSize, setSelectedSize] = useState(null)
@@ -39,7 +40,7 @@ const images = product.images && product.images.length > 0 ? product.images : [p
   const handleBuyNow = () => {
     if (!selectedSize) return
     addItem(product, selectedSize)
-    window.location.href = '/cart'
+    router.push('/cart')
   }
 
   return (

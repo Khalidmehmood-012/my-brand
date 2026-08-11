@@ -131,20 +131,20 @@ export default function CategoryGrid() {
   return (
     <section 
       id="category-grid" 
-      className="max-w-7xl mx-auto px-4 py-20 scroll-mt-16 bg-black"
+      className="max-w-7xl mx-auto px-4 py-20 scroll-mt-16 bg-white"
     >
 
       {/* Heading with Animation - WHITE TEXT */}
       <div className="text-center mb-14">
         <div className="inline-block">
-          <span className="text-xs font-black uppercase tracking-[0.3em] text-gray-300 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
-            Collection 2024
+          <span className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 bg-stone-100 px-4 py-2 rounded-full border border-stone-200">
+            New Collection
           </span>
         </div>
-        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight text-white mt-4 drop-shadow-lg">
-          Choose Your <span className="text-white">Style</span>
+        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight text-gray-950 mt-4">
+          Choose Your <span className="text-gray-400">Style</span>
         </h2>
-        <p className="text-white/70 text-sm mt-3 max-w-md mx-auto drop-shadow-md">
+        <p className="text-gray-500 text-sm mt-3 max-w-md mx-auto">
           Find your perfect fit from our premium collections
         </p>
       </div>
@@ -155,7 +155,7 @@ export default function CategoryGrid() {
           <Link
             key={gender.id}
             href={`/collections/${gender.slug}`}
-            className={`group relative rounded-3xl overflow-hidden bg-black transform transition-all duration-700 hover:scale-[1.02] hover:shadow-2xl ${
+            className={`group relative rounded-3xl overflow-hidden bg-stone-100 ring-1 ring-black/5 transform transition-all duration-700 hover:scale-[1.02] hover:shadow-2xl hover:shadow-black/10 ${
               index === 0 ? 'md:-translate-y-4' : 'md:translate-y-4'
             }`}
           >

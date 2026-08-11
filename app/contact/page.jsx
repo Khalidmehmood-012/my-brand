@@ -40,7 +40,7 @@ export default function ContactPage() {
             Get In Touch
           </span>
           <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-black mt-3">
-            Let's <span className="text-transparent bg-clip-text bg-linear-to-r from-black to-gray-600">Connect</span>
+            Let’s <span className="text-transparent bg-clip-text bg-linear-to-r from-black to-gray-600">Connect</span>
           </h1>
           <div className="w-12 h-0.5 bg-black mx-auto mt-3" />
           <p className="text-gray-500 text-sm mt-3 max-w-xl mx-auto">

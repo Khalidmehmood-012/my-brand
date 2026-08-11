@@ -149,7 +149,6 @@ export default function ProductCard({ product }) {
     setAdded(true)
     setTimeout(() => setAdded(false), 1500)
   }
-console.log('Product images:', product.images)
   return (
     <div 
       className="group relative rounded-xl overflow-hidden bg-white transition-all duration-300 hover:shadow-lg"

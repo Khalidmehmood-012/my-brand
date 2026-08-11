@@ -25,7 +25,7 @@ export default function Navbar() {
 
   useEffect(() => {
     initAuth()
-  }, [])
+  }, [initAuth])
 
   const handleMouseEnter = (label) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
@@ -275,7 +275,7 @@ export default function Navbar() {
               {/* No Results */}
               {searchQuery.length > 1 && searchResults.length === 0 && (
                 <div className="mt-3 text-center py-6 text-gray-400 text-sm">
-                  No products found for "{searchQuery}"
+                  No products found for &quot;{searchQuery}&quot;
                 </div>
               )}
             </div>

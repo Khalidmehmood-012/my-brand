@@ -54,7 +54,7 @@ export default function WomenPage() {
             </div>
 
             <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tight text-white leading-[1.05]">
-              Women's
+              Women’s
               <span className="block text-transparent bg-clip-text bg-linear-to-r from-pink-200 to-white">
                 Elegance
               </span>

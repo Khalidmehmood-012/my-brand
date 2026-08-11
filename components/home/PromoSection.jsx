@@ -67,17 +67,17 @@ import Link from 'next/link'
 
 export default function PromoSection() {
   return (
-    <section className="max-w-7xl mx-auto px-4 py-16 bg-black">
+    <section className="max-w-7xl mx-auto px-4 py-20 bg-white">
 
       {/* Heading */}
       <div className="text-center mb-12">
-        <span className="text-xs font-black uppercase tracking-[0.3em] text-gray-400 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+        <span className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 bg-stone-100 px-4 py-2 rounded-full border border-stone-200">
           Exclusive Deals
         </span>
-        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-white mt-3">
-          <span className="text-transparent bg-clip-text bg-linear-to-r from-gray-300 to-white">Limited</span> Time Offers
+        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-gray-950 mt-3">
+          <span className="text-gray-400">Limited</span> Time Offers
         </h2>
-        <p className="text-gray-500 text-sm mt-2">Grab your favorites before they're gone</p>
+        <p className="text-gray-500 text-sm mt-2">Grab your favorites before they’re gone</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -85,7 +85,7 @@ export default function PromoSection() {
         {/* Promo 1 — Men's Collection */}
         <Link
           href="/sale?discount=30"
-          className="group relative rounded-2xl overflow-hidden h-80 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-white/5"
+          className="group relative rounded-2xl overflow-hidden h-80 ring-1 ring-black/5 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-black/10"
         >
           <div className="absolute inset-0">
             <img
@@ -117,7 +117,7 @@ export default function PromoSection() {
             </h3>
             <p className="text-white/50 text-sm">T-Shirts • Hoodies • Jackets</p>
             <div className="mt-4 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-white group-hover:gap-4 transition-all duration-300 border-b-2 border-white/30 pb-1 group-hover:border-white">
-              Shop Men's Sale
+              Shop Men’s Sale
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
@@ -128,7 +128,7 @@ export default function PromoSection() {
         {/* Promo 2 — Women's Collection */}
         <Link
           href="/sale?discount=40"
-          className="group relative rounded-2xl overflow-hidden h-80 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-white/5"
+          className="group relative rounded-2xl overflow-hidden h-80 ring-1 ring-black/5 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-black/10"
         >
           <div className="absolute inset-0">
             <img
@@ -160,7 +160,7 @@ export default function PromoSection() {
             </h3>
             <p className="text-white/50 text-sm">Dresses • Tops • Accessories</p>
             <div className="mt-4 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-white group-hover:gap-4 transition-all duration-300 border-b-2 border-white/30 pb-1 group-hover:border-white">
-              Shop Women's Sale
+              Shop Women’s Sale
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
@@ -172,21 +172,21 @@ export default function PromoSection() {
 
       {/* Bottom Stats */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white/5 rounded-2xl p-5 text-center border border-white/5 hover:border-white/20 transition-all duration-300 group backdrop-blur-sm">
-          <p className="text-3xl font-black text-white group-hover:scale-110 transition-transform">50K+</p>
-          <p className="text-[10px] text-white/40 uppercase tracking-widest mt-1">Happy Customers</p>
+        <div className="bg-stone-50 rounded-2xl p-5 text-center border border-stone-200 hover:border-black/20 transition-all duration-300 group">
+          <p className="text-3xl font-black text-gray-950 group-hover:scale-110 transition-transform">50K+</p>
+          <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Happy Customers</p>
         </div>
-        <div className="bg-white/5 rounded-2xl p-5 text-center border border-white/5 hover:border-white/20 transition-all duration-300 group backdrop-blur-sm">
-          <p className="text-3xl font-black text-white group-hover:scale-110 transition-transform">4.9★</p>
-          <p className="text-[10px] text-white/40 uppercase tracking-widest mt-1">Average Rating</p>
+        <div className="bg-stone-50 rounded-2xl p-5 text-center border border-stone-200 hover:border-black/20 transition-all duration-300 group">
+          <p className="text-3xl font-black text-gray-950 group-hover:scale-110 transition-transform">4.9★</p>
+          <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Average Rating</p>
         </div>
-        <div className="bg-white/5 rounded-2xl p-5 text-center border border-white/5 hover:border-white/20 transition-all duration-300 group backdrop-blur-sm">
-          <p className="text-3xl font-black text-white group-hover:scale-110 transition-transform">100%</p>
-          <p className="text-[10px] text-white/40 uppercase tracking-widest mt-1">Authentic</p>
+        <div className="bg-stone-50 rounded-2xl p-5 text-center border border-stone-200 hover:border-black/20 transition-all duration-300 group">
+          <p className="text-3xl font-black text-gray-950 group-hover:scale-110 transition-transform">100%</p>
+          <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Authentic</p>
         </div>
-        <div className="bg-white/5 rounded-2xl p-5 text-center border border-white/5 hover:border-white/20 transition-all duration-300 group backdrop-blur-sm">
-          <p className="text-3xl font-black text-white group-hover:scale-110 transition-transform">Free</p>
-          <p className="text-[10px] text-white/40 uppercase tracking-widest mt-1">Shipping</p>
+        <div className="bg-stone-50 rounded-2xl p-5 text-center border border-stone-200 hover:border-black/20 transition-all duration-300 group">
+          <p className="text-3xl font-black text-gray-950 group-hover:scale-110 transition-transform">Free</p>
+          <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Shipping</p>
         </div>
       </div>
 

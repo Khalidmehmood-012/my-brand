@@ -14,13 +14,13 @@ export default function ProfilePage() {
   return () => {
     if (typeof unsubscribe === 'function') unsubscribe()
   }
-}, [])
+}, [initAuth])
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login')
     }
-  }, [user, loading])
+  }, [user, loading, router])
 
   if (loading) {
     return (

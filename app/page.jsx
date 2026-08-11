@@ -1,13 +1,14 @@
 import HeroBanner from '@/components/home/HeroBanner'
 import CategoryGrid from '@/components/home/CategoryGrid'
 import FeaturedProducts from '@/components/home/FeaturedProducts'
+import HomeCustomOrder from '@/components/home/HomeCustomOrder'
 import PromoSection from '@/components/home/PromoSection'
 import NewsletterSection from '@/components/home/NewsletterSection'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 
 export default function HomePage() {
   return (
-    <div>
+    <div className="bg-white text-gray-950">
       {/* Hero Banner Slider */}
       <HeroBanner />
 
@@ -16,6 +17,9 @@ export default function HomePage() {
 
       {/* Most Popular Picks */}
       <FeaturedProducts />
+
+      {/* Design Your Own Shirt */}
+      <HomeCustomOrder />
 
       {/* Sale Promo Banners */}
       <PromoSection />

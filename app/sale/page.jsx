@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import ProductGrid from '@/components/products/ProductGrid'
 import Breadcrumb from '@/components/ui/Breadcrumb'
@@ -13,13 +13,6 @@ function SaleContent() {
   const discountParam = searchParams.get('discount')
   
   const [selectedDiscount, setSelectedDiscount] = useState(discountParam || 'all')
-
-  // URL se discount param mile to filter set karein
-  useEffect(() => {
-    if (discountParam) {
-      setSelectedDiscount(discountParam)
-    }
-  }, [discountParam])
 
   // Sirf wo products jo sale pe hain
   const saleProducts = products.filter(
@@ -170,7 +163,7 @@ function SaleContent() {
         {/* Bottom CTA */}
         <div className="mt-16 bg-gray-100 rounded-3xl p-8 md:p-12 text-center border-2 border-gray-200">
           <p className="text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-2">
-            Don't Miss Out
+            Don’t Miss Out
           </p>
           <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-black mb-3">
             Sale Ends Soon!

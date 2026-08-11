@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import useCartStore from '@/lib/store'
 
-export default function CustomOrder() {
+export default function CustomOrder({ variant = 'default' }) {
   const addItem = useCartStore((state) => state.addItem)
   const [added, setAdded] = useState(false)
   const [imagePreview, setImagePreview] = useState(null)
@@ -76,8 +76,12 @@ export default function CustomOrder() {
   }
 
   return (
-    <div className="mt-12 border-t-2 border-black pt-10">
-      <div className="bg-white border-2 border-black rounded-3xl p-6 md:p-8 shadow-lg">
+    <div className={variant === 'home' ? '' : 'mt-12 border-t-2 border-black pt-10'}>
+      <div className={`bg-white rounded-3xl p-6 md:p-8 ${
+        variant === 'home'
+          ? 'border border-stone-200 shadow-[0_24px_70px_rgba(0,0,0,0.08)]'
+          : 'border-2 border-black shadow-lg'
+      }`}>
         
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
@@ -90,7 +94,7 @@ export default function CustomOrder() {
             <h2 className="text-xl font-black uppercase tracking-widest text-black">
               Customize Your Shirt
             </h2>
-            <p className="text-xs text-gray-400">Don't like our designs? Create your own!</p>
+            <p className="text-xs text-gray-400">Don’t like our designs? Create your own!</p>
           </div>
           <span className="ml-auto text-xs bg-black text-white px-3 py-1 rounded-full font-bold uppercase tracking-wider">
             New

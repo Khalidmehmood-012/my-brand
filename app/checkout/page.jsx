@@ -9,6 +9,7 @@ export default function CheckoutPage() {
   const items = useCartStore((state) => state.items)
   const clearCart = useCartStore((state) => state.clearCart)
   const [ordered, setOrdered] = useState(false)
+  const [orderId, setOrderId] = useState(null)
   const [paymentMethod, setPaymentMethod] = useState('cod')
   const [showAccountDetails, setShowAccountDetails] = useState(false)
   const [form, setForm] = useState({
@@ -46,7 +47,7 @@ export default function CheckoutPage() {
       const useAuthStore = (await import('@/lib/authStore')).default
       const user = useAuthStore.getState().user
 
-      await addDoc(collection(db, 'orders'), {
+      const orderRef = await addDoc(collection(db, 'orders'), {
         userId: user?.uid || 'guest',
         customerName: form.name,
         phone: form.phone,
@@ -70,9 +71,11 @@ export default function CheckoutPage() {
       }
 
       clearCart()
+      setOrderId(orderRef.id.slice(-5).toUpperCase())
       setOrdered(true)
     } catch (err) {
       clearCart()
+      setOrderId('PENDING')
       setOrdered(true)
     }
   }
@@ -89,7 +92,7 @@ export default function CheckoutPage() {
           <h1 className="text-4xl font-black uppercase tracking-tight text-black mb-3">
             Order Placed!
           </h1>
-          <p className="text-gray-500 text-sm mb-2">Order ID: <span className="font-bold text-black">#{Math.floor(Math.random() * 90000) + 10000}</span></p>
+          <p className="text-gray-500 text-sm mb-2">Order ID: <span className="font-bold text-black">#{orderId}</span></p>
           <p className="text-gray-400 text-sm mb-8 leading-relaxed">
             Thank you <span className="font-bold text-black">{form.name}</span>! We will contact you on <span className="font-bold text-black">{form.phone}</span> to confirm your order.
           </p>
