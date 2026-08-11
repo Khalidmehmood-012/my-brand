@@ -30,8 +30,8 @@ const megaMenuData = {
       },
     ],
     images: [
-      { src: '/images/banners/women.jpg', label: 'New In', href: '/collections/women-tshirts' },
-      { src: '/images/banners/women.jpg', label: 'Shop Women', href: '/collections/women-hoodies' },
+      { src: '/images/banners/banner2.jpg', label: 'New In', href: '/collections/women-tshirts' },
+      { src: '/images/banners/A1.jpg', label: 'Shop Women', href: '/collections/women-hoodies' },
     ],
   },
 
@@ -103,8 +103,8 @@ const megaMenuData = {
       },
     ],
     images: [
-      { src: '/images/banners/tshirts.jpg', label: 'New In', href: '/collections/tshirts' },
-      { src: '/images/banners/tshirts.jpg', label: 'Best Sellers', href: '/collections/tshirts' },
+      { src: '/images/banners/men.jpg', label: 'New In', href: '/collections/tshirts' },
+      { src: '/images/banners/H1.jpg', label: 'Best Sellers', href: '/collections/tshirts' },
     ],
   },
 
@@ -164,7 +164,7 @@ const megaMenuData = {
       },
     ],
     images: [
-      { src: '/images/banners/accessories.jpg', label: 'Accessories', href: '/collections/accessories' },
+      { src: '/images/banners/hero1.jpg', label: 'Accessories', href: '/collections/accessories' },
     ],
   },
 
