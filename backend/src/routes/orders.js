@@ -10,7 +10,7 @@ import { env } from '../config/env.js'
 import { authenticate, authorize, optionalAuthenticate } from '../middleware/auth.js'
 import { AppError, asyncHandler, pagination, success } from '../utils/api.js'
 import Setting from '../models/Setting.js'
-import { pakistanLocations, shippingFor } from '../../../data/pakistan-locations.js'
+import { pakistanLocations, shippingFor } from '../data/pakistan-locations.js'
 
 const router = Router()
 

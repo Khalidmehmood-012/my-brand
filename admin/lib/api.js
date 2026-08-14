@@ -1,4 +1,4 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || '/backend-api'
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://komrez.fleximagepro.com/api'
 
 export function getToken() {
   if (typeof window === 'undefined') return null

@@ -6,7 +6,7 @@ import User from '../models/User.js'
 import Product from '../models/Product.js'
 import Category from '../models/Category.js'
 import Setting from '../models/Setting.js'
-import { defaultShippingRates } from '../../../data/pakistan-locations.js'
+import { defaultShippingRates } from '../data/pakistan-locations.js'
 
 const categories = [
   { name: 'T-Shirts', slug: 'tshirts', description: 'Premium graphic, oversized and everyday T-shirts.', sections: ['men', 'women'], subcategories: ['Graphic Tees', 'Oversized Tees', 'Crop Tops', 'Half Sleeve'], subcategoryBadges: { 'Graphic Tees': 'NEW' }, sortOrder: 1 },

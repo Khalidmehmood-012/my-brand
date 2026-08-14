@@ -2,7 +2,7 @@ import { connectDatabase, disconnectDatabase } from '../config/database.js'
 import Product from '../models/Product.js'
 import Setting from '../models/Setting.js'
 import Category from '../models/Category.js'
-import { defaultShippingRates } from '../../../data/pakistan-locations.js'
+import { defaultShippingRates } from '../data/pakistan-locations.js'
 
 const products = [
   { name: 'Urban Mono Hoodie', slug: 'urban-mono-hoodie', category: 'hoodies', gender: 'unisex', price: 3490, purchasePrice: 1850, image: 'https://images.unsplash.com/photo-1724763626380-ee4188fdcf6f?auto=format&fit=crop&w=1000&q=85', sizes: ['S','M','L','XL','2XL'], stock: 24, badge: 'NEW' },
