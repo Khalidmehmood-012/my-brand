@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Komrez Full-Stack Store
 
-## Getting Started
+Komrez now contains three applications in one repository:
 
-First, run the development server:
+- **Storefront** (`/`) — Next.js customer website on port `3000`
+- **Backend** (`/backend`) — Node.js, Express and MongoDB REST API on port `5001`
+- **Admin** (`/admin`) — separate Next.js administration panel on port `3001`
+
+## Requirements
+
+- Node.js 20 or newer
+- npm
+- MongoDB running locally at `mongodb://localhost:27017`
+
+The backend uses the `komrez` database. MongoDB creates it when the seed command writes the first records.
+
+## First-time setup
+
+Install each application's dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm --prefix backend install
+npm --prefix admin install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Seed MongoDB with the starter catalog, categories, store settings and the first admin, then safely add the expanded catalog:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+npm run backend:seed
+npm --prefix backend run expand:catalog
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Default local admin credentials:
 
-## Learn More
+```text
+Email: admin@komrez.com
+Password: ChangeMe123!
+```
 
-To learn more about Next.js, take a look at the following resources:
+Change `ADMIN_PASSWORD` and `JWT_SECRET` in `backend/.env` before production or sharing the server.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Run all applications
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open three terminals:
 
-## Deploy on Vercel
+```bash
+# Terminal 1 — API
+npm run backend:dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Terminal 2 — storefront
+npm run dev
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Terminal 3 — admin panel
+npm run admin:dev
+```
+
+Open:
+
+- Storefront: http://localhost:3000
+- Admin: http://localhost:3001
+- API health: http://localhost:5001/api/health
+
+## Data flow
+
+- Products, categories, users, carts, orders and settings live in MongoDB.
+- Storefront catalog, homepage product sections and search load products only through the API; browser-side seed-product fallback has been removed.
+- Checkout creates a MongoDB order and preserves the cart when the request fails. Guests can order without an account; password and address saving are offered only when they choose to create one.
+- Signed-in customers can reuse a saved address or enter a new one. Their profile shows complete order history, order IDs, items, totals, payment state and tracking history.
+- Logged-in carts sync through the API; guest carts remain local until the customer logs in.
+- Track Order reads the real MongoDB order status and history.
+- Admin users authenticate with JWT and can manage multiple product images, inventory value, categories, hero slides, payment methods, payment proof approval, orders, users and database backups.
+- Customer and admin notification bells receive live backend events without repeated polling and play a short alert for new notifications.
+- Stock is capped in the cart, deducted after ordering and restored once for cancelled, returned or refunded orders. Delivered-order damage claims are reviewed separately in Admin → Damage claims.
+- Manual customer signup/login uses the Komrez backend. Google login is verified through Firebase, then the customer is created/updated in MongoDB and appears in Admin → Users.
+
+## Move data to another MongoDB
+
+In Admin → **Data migration**, download a backup. Change `MONGODB_URI` in `backend/.env` to the new database, restart the backend, then return to the same page and import the backup. Products, categories, customers, carts, orders, settings, notifications and IDs are preserved.
+
+Complete endpoint documentation, response envelopes and error codes are in [backend/README.md](./backend/README.md).

@@ -4,21 +4,21 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import useAuthStore from '@/lib/authStore'
 import Link from 'next/link'
+import { toast } from '@/components/ui/ToastProvider'
 
 export default function LoginPage() {
   const router = useRouter()
   const { loginWithGoogle, loginWithEmail } = useAuthStore()
   const [isRegister, setIsRegister] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', password: '' })
-  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const destination = () => { if (typeof window === 'undefined') return '/profile'; const value = new URLSearchParams(window.location.search).get('returnTo'); return value?.startsWith('/') ? value : '/profile' }
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
   const handleEmailAuth = async () => {
-    setError('')
     setLoading(true)
     try {
       if (isRegister) {
@@ -30,21 +30,20 @@ export default function LoginPage() {
       } else {
         await loginWithEmail(form.email, form.password)
       }
-      router.push('/profile')
+      router.push(destination())
     } catch (err) {
-      setError(err.message.includes('invalid') ? 'Invalid email or password' : err.message)
+      toast('error', err.message.includes('invalid') ? 'Invalid email or password' : err.message, isRegister ? 'Signup failed' : 'Login failed')
     }
     setLoading(false)
   }
 
   const handleGoogle = async () => {
-    setError('')
     setLoading(true)
     try {
       await loginWithGoogle()
-      router.push('/profile')
+      router.push(destination())
     } catch (err) {
-      setError('Google login failed. Please try again.')
+      toast('error', 'Google login failed. Please try again.', 'Google login failed')
     }
     setLoading(false)
   }
@@ -65,13 +64,6 @@ export default function LoginPage() {
         <p className="text-gray-500 text-sm text-center mb-8">
           {isRegister ? 'Join MyBrand today!' : 'Login to your account'}
         </p>
-
-        {/* Error */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3 mb-4">
-            {error}
-          </div>
-        )}
 
         {/* Google Button */}
         <button

@@ -1,9 +1,10 @@
 import ProductGrid from '@/components/products/ProductGrid'
-import products from '@/data/products'
+import { getProducts } from '@/lib/backend'
 import Link from 'next/link'
 
-export default function FeaturedProducts() {
-  // Sirf pehle 4 products dikhao
+export default async function FeaturedProducts() {
+  const products = await getProducts('featured=true')
+  // Display the first four products only.
   const featured = products.slice(0, 8)
 
   return (

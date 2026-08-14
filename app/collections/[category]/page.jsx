@@ -2,13 +2,19 @@
 
 import { useState } from 'react'
 import { use } from 'react'
+import { useSearchParams } from 'next/navigation'
 import ProductCard from '@/components/products/ProductCard'
 import CustomOrder from '@/components/products/CustomOrder'  // ← NAYA IMPORT
-import products from '@/data/products'
+import useProducts from '@/lib/useProducts'
+import usePublicConfig from '@/lib/usePublicConfig'
 
 export default function CollectionPage({ params }) {
+  const { products } = useProducts()
+  const { categories: apiCategories } = usePublicConfig()
   const { category } = use(params)
-  const [selectedSub, setSelectedSub] = useState('All')
+  const gender = useSearchParams().get('gender')
+  const requestedSubcategory = useSearchParams().get('subcategory')
+  const [selectedSub, setSelectedSub] = useState(requestedSubcategory || 'All')
 
   const categoryNames = {
     tshirts: 'T-Shirts',
@@ -18,20 +24,15 @@ export default function CollectionPage({ params }) {
 
   const categoryLabel = categoryNames[category] || category
 
-  const subcategories = {
-    tshirts: ['All', 'Full Shirt', 'Half Shirt', 'Shoulder Shirt', 'Polo Shirt', 'Graphic Tee', 'Oversized Tee'],
-    hoodies: ['All', 'Pullover', 'Zip Hoodie', 'Oversized Hoodie', 'Sleeveless'],
-    accessories: ['All', 'Caps', 'Tote Bags', 'Backpacks', 'Socks'],
-  }
+  const apiCategory = apiCategories.find((item) => item.slug === (category.startsWith('women-') ? category.replace('women-', '') : category))
+  const subcategories = ['All', ...(apiCategory?.subcategories || [])]
 
  const filtered = products.filter((p) => {
-  const categoryMatch =
-    (category === 'women-tshirts' && p.category === 'tshirts' && p.gender === 'women') ||
-    (category === 'women-hoodies' && p.category === 'hoodies' && p.gender === 'women') ||
-    (category === 'tshirts' && p.category === 'tshirts' && p.gender === 'men') ||
-    (category === 'hoodies' && p.category === 'hoodies' && p.gender === 'men') ||
-    (category === 'accessories' && p.category === 'accessories')
-  const subMatch = selectedSub === 'All' || p.subcategory === selectedSub
+  const actualCategory = category === 'women-tshirts' ? 'tshirts' : category === 'women-hoodies' ? 'hoodies' : category
+  const requestedGender = category.startsWith('women-') ? 'women' : gender || (['tshirts', 'hoodies'].includes(category) ? 'men' : '')
+  const categoryMatch = p.category === actualCategory && (!requestedGender || p.gender === requestedGender || p.gender === 'unisex')
+  const normalizeSub = (value = '') => value.toLowerCase().replace(/[^a-z0-9]/g, '').replace(/s$/, '')
+  const subMatch = selectedSub === 'All' || normalizeSub(p.subcategory) === normalizeSub(selectedSub)
   return categoryMatch && subMatch
 })
 
@@ -54,7 +55,7 @@ export default function CollectionPage({ params }) {
 
         {/* Subcategory Tabs */}
         <div className="flex gap-2 overflow-x-auto pb-2 mb-8 justify-center flex-wrap">
-          {(subcategories[category] || ['All']).map((sub) => (
+          {subcategories.map((sub) => (
             <button
               key={sub}
               onClick={() => setSelectedSub(sub)}
@@ -84,12 +85,10 @@ export default function CollectionPage({ params }) {
           </div>
         )}
 
-        {/* Custom Order Section - Sirf T-Shirts category mein show hoga */}
+        {/* Custom order section is available for the T-Shirts category only. */}
         {category === 'tshirts' && <CustomOrder />}
 
       </div>
     </div>
   )
 }
-
-

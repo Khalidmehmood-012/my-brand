@@ -4,10 +4,11 @@ import { useState } from 'react'
 import ProductGrid from '@/components/products/ProductGrid'
 import ProductFilter from '@/components/products/ProductFilter'
 import Breadcrumb from '@/components/ui/Breadcrumb'
-import products from '@/data/products'
+import useProducts from '@/lib/useProducts'
 import Link from 'next/link'
 
 export default function ShopPage() {
+  const { products } = useProducts()
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [selectedSize, setSelectedSize] = useState('All')
 

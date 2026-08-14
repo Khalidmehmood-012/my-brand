@@ -1,0 +1,849 @@
+[{
+  "_id": {
+    "$oid": "6a7ae8b070364a3dcbcca079"
+  },
+  "slug": "classic-black-oversized-tee",
+  "__v": 0,
+  "badge": "NEW IN",
+  "category": "tshirts",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:36.934Z"
+  },
+  "description": "Premium quality oversized t-shirt for everyday wear.",
+  "gender": "men",
+  "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR51ppoNJkExkgIPBYFyGZDNsuOtHsjNb7x4AKoJkNWFw&s"
+  ],
+  "isActive": true,
+  "isFeatured": true,
+  "legacyId": "1",
+  "name": "Classic Black Oversized Tee",
+  "originalPrice": 2000,
+  "price": 1500,
+  "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL"
+  ],
+  "stock": 100,
+  "subcategory": "Oversized Tee",
+  "updatedAt": {
+    "$date": "2026-08-11T10:11:02.259Z"
+  },
+  "isOnSale": true,
+  "purchasePrice": 825
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b070364a3dcbcca07a"
+  },
+  "slug": "urban-street-hoodie",
+  "__v": 0,
+  "badge": "SALE",
+  "category": "hoodies",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:36.945Z"
+  },
+  "description": "Comfortable hoodie with a modern street style look.",
+  "gender": "men",
+  "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1533561591210-9f4f5b7369b1?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": true,
+  "legacyId": "2",
+  "name": "Urban Street Hoodie",
+  "originalPrice": 4500,
+  "price": 3500,
+  "sizes": [
+    "M",
+    "L",
+    "XL"
+  ],
+  "stock": 100,
+  "subcategory": "Pullover",
+  "updatedAt": {
+    "$date": "2026-08-11T10:11:02.268Z"
+  },
+  "isOnSale": true,
+  "purchasePrice": 1925
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b070364a3dcbcca07b"
+  },
+  "slug": "white-graphic-tee",
+  "__v": 0,
+  "badge": "NEW IN",
+  "category": "tshirts",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:36.948Z"
+  },
+  "description": "Clean white tee with a bold graphic print.",
+  "gender": "men",
+  "image": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1503342394118-1e6f823c1f19?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": true,
+  "legacyId": "3",
+  "name": "White Graphic Tee",
+  "originalPrice": 1200,
+  "price": 1200,
+  "sizes": [
+    "S",
+    "M",
+    "L"
+  ],
+  "stock": 100,
+  "subcategory": "Graphic Tee",
+  "updatedAt": {
+    "$date": "2026-08-11T10:11:02.270Z"
+  },
+  "isOnSale": false,
+  "purchasePrice": 660
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b070364a3dcbcca07c"
+  },
+  "slug": "black-zip-hoodie",
+  "__v": 0,
+  "badge": "",
+  "category": "hoodies",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:36.957Z"
+  },
+  "description": "Full zip hoodie in premium fleece fabric.",
+  "gender": "men",
+  "image": "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1533561591210-9f4f5b7369b1?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": true,
+  "legacyId": "4",
+  "name": "Black Zip Hoodie",
+  "originalPrice": 3800,
+  "price": 3800,
+  "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL"
+  ],
+  "stock": 100,
+  "subcategory": "Zip Hoodie",
+  "updatedAt": {
+    "$date": "2026-08-11T10:11:02.271Z"
+  },
+  "isOnSale": false,
+  "purchasePrice": 2090
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b070364a3dcbcca07d"
+  },
+  "slug": "street-cap-black",
+  "__v": 0,
+  "badge": "SALE",
+  "category": "accessories",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:36.961Z"
+  },
+  "description": "Classic black cap with embroidered logo.",
+  "gender": "unisex",
+  "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": true,
+  "legacyId": "5",
+  "name": "Street Cap Black",
+  "originalPrice": 1000,
+  "price": 800,
+  "sizes": [
+    "One Size"
+  ],
+  "stock": 99,
+  "subcategory": "Caps",
+  "updatedAt": {
+    "$date": "2026-08-11T12:30:51.155Z"
+  },
+  "isOnSale": true,
+  "purchasePrice": 440
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b070364a3dcbcca07e"
+  },
+  "slug": "canvas-tote-bag",
+  "__v": 0,
+  "badge": "NEW IN",
+  "category": "accessories",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:36.964Z"
+  },
+  "description": "Durable canvas tote bag with brand print.",
+  "gender": "unisex",
+  "image": "https://images.unsplash.com/photo-1544816155-12df9643f363?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1544816155-12df9643f363?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1544816155-12df9643f363?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": true,
+  "legacyId": "6",
+  "name": "Canvas Tote Bag",
+  "originalPrice": 600,
+  "price": 600,
+  "sizes": [
+    "One Size"
+  ],
+  "stock": 100,
+  "subcategory": "Tote Bags",
+  "updatedAt": {
+    "$date": "2026-08-11T10:11:02.273Z"
+  },
+  "isOnSale": false,
+  "purchasePrice": 330
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b070364a3dcbcca07f"
+  },
+  "slug": "white-half-sleeve-shirt",
+  "__v": 0,
+  "badge": "NEW IN",
+  "category": "tshirts",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:36.970Z"
+  },
+  "description": "Lightweight half sleeve shirt perfect for summer.",
+  "gender": "men",
+  "image": "https://images.unsplash.com/photo-1586363104861-3a5e2ab60c39?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1586363104861-3a5e2ab60c39?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1503342394118-1e6f823c1f19?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "legacyId": "7",
+  "name": "White Half Sleeve Shirt",
+  "originalPrice": 1400,
+  "price": 1100,
+  "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL"
+  ],
+  "stock": 100,
+  "subcategory": "Half Sleeve",
+  "updatedAt": {
+    "$date": "2026-08-11T10:12:38.684Z"
+  },
+  "isOnSale": true,
+  "purchasePrice": 605
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b070364a3dcbcca080"
+  },
+  "slug": "black-full-sleeve-shirt",
+  "__v": 0,
+  "badge": "",
+  "category": "tshirts",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:36.978Z"
+  },
+  "description": "Classic black full sleeve shirt for all occasions.",
+  "gender": "men",
+  "image": "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1503342394118-1e6f823c1f19?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": true,
+  "legacyId": "8",
+  "name": "Black Full Sleeve Shirt",
+  "originalPrice": 1300,
+  "price": 1300,
+  "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL"
+  ],
+  "stock": 99,
+  "subcategory": "Full Sleeve",
+  "updatedAt": {
+    "$date": "2026-08-11T10:40:48.162Z"
+  },
+  "isOnSale": false,
+  "purchasePrice": 715
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b070364a3dcbcca081"
+  },
+  "slug": "drop-shoulder-tee",
+  "__v": 0,
+  "badge": "SALE",
+  "category": "tshirts",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:36.981Z"
+  },
+  "description": "Trendy drop shoulder tee with relaxed fit.",
+  "gender": "men",
+  "image": "https://images.unsplash.com/photo-1503342394118-1e6f823c1f19?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1503342394118-1e6f823c1f19?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "legacyId": "9",
+  "name": "Drop Shoulder Tee",
+  "originalPrice": 2000,
+  "price": 1600,
+  "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL"
+  ],
+  "stock": 100,
+  "subcategory": "Shoulder",
+  "updatedAt": {
+    "$date": "2026-08-11T10:11:02.276Z"
+  },
+  "isOnSale": true,
+  "purchasePrice": 880
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b070364a3dcbcca082"
+  },
+  "slug": "classic-polo-shirt",
+  "__v": 0,
+  "badge": "NEW IN",
+  "category": "tshirts",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:36.983Z"
+  },
+  "description": "Premium polo shirt for a smart casual look.",
+  "gender": "men",
+  "image": "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1503342394118-1e6f823c1f19?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "legacyId": "10",
+  "name": "Classic Polo Shirt",
+  "originalPrice": 1400,
+  "price": 1400,
+  "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL"
+  ],
+  "stock": 100,
+  "subcategory": "Polo",
+  "updatedAt": {
+    "$date": "2026-08-11T10:11:02.276Z"
+  },
+  "isOnSale": false,
+  "purchasePrice": 770
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b070364a3dcbcca083"
+  },
+  "slug": "grey-oversized-hoodie",
+  "__v": 0,
+  "badge": "SALE",
+  "category": "hoodies",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:36.986Z"
+  },
+  "description": "Super comfortable grey oversized hoodie.",
+  "gender": "men",
+  "image": "https://images.unsplash.com/photo-1533561591210-9f4f5b7369b1?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1533561591210-9f4f5b7369b1?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "legacyId": "11",
+  "name": "Grey Oversized Hoodie",
+  "originalPrice": 4000,
+  "price": 3200,
+  "sizes": [
+    "M",
+    "L",
+    "XL"
+  ],
+  "stock": 100,
+  "subcategory": "Oversized",
+  "updatedAt": {
+    "$date": "2026-08-11T10:11:02.277Z"
+  },
+  "isOnSale": true,
+  "purchasePrice": 1760
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b070364a3dcbcca084"
+  },
+  "slug": "street-backpack",
+  "__v": 0,
+  "badge": "NEW IN",
+  "category": "accessories",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:36.992Z"
+  },
+  "description": "Durable street style backpack for everyday use.",
+  "gender": "unisex",
+  "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "legacyId": "12",
+  "name": "Street Backpack",
+  "originalPrice": 2500,
+  "price": 2500,
+  "sizes": [
+    "One Size"
+  ],
+  "stock": 100,
+  "subcategory": "Backpacks",
+  "updatedAt": {
+    "$date": "2026-08-11T10:11:02.278Z"
+  },
+  "isOnSale": false,
+  "purchasePrice": 1375
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b070364a3dcbcca085"
+  },
+  "slug": "women-graphic-tee",
+  "__v": 0,
+  "badge": "NEW IN",
+  "category": "tshirts",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:36.996Z"
+  },
+  "description": "Stylish graphic tee designed for women.",
+  "gender": "women",
+  "image": "https://images.unsplash.com/photo-1525507119028-ed4c629a60a6?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1525507119028-ed4c629a60a6?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "legacyId": "13",
+  "name": "Women Graphic Tee",
+  "originalPrice": 1200,
+  "price": 1200,
+  "sizes": [
+    "XS",
+    "S",
+    "M",
+    "L"
+  ],
+  "stock": 100,
+  "subcategory": "Graphic Tee",
+  "updatedAt": {
+    "$date": "2026-08-11T10:11:02.278Z"
+  },
+  "isOnSale": false,
+  "purchasePrice": 660
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b170364a3dcbcca086"
+  },
+  "slug": "women-crop-top",
+  "__v": 0,
+  "badge": "SALE",
+  "category": "tshirts",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:37.000Z"
+  },
+  "description": "Trendy crop top for a modern street look.",
+  "gender": "women",
+  "image": "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "legacyId": "14",
+  "name": "Women Crop Top",
+  "originalPrice": 1400,
+  "price": 1100,
+  "sizes": [
+    "XS",
+    "S",
+    "M"
+  ],
+  "stock": 100,
+  "subcategory": "Crop",
+  "updatedAt": {
+    "$date": "2026-08-11T10:11:02.280Z"
+  },
+  "isOnSale": true,
+  "purchasePrice": 605
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b170364a3dcbcca087"
+  },
+  "slug": "women-oversized-hoodie",
+  "__v": 0,
+  "badge": "NEW IN",
+  "category": "hoodies",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:37.011Z"
+  },
+  "description": "Cozy oversized hoodie perfect for women.",
+  "gender": "women",
+  "image": "https://images.unsplash.com/photo-1558618666-fcd25c85f0b9?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1558618666-fcd25c85f0b9?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "legacyId": "15",
+  "name": "Women Oversized Hoodie",
+  "originalPrice": 3800,
+  "price": 3000,
+  "sizes": [
+    "XS",
+    "S",
+    "M",
+    "L"
+  ],
+  "stock": 100,
+  "subcategory": "Oversized",
+  "updatedAt": {
+    "$date": "2026-08-11T10:11:02.282Z"
+  },
+  "isOnSale": true,
+  "purchasePrice": 1650
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b170364a3dcbcca088"
+  },
+  "slug": "women-zip-hoodie",
+  "__v": 0,
+  "badge": "",
+  "category": "hoodies",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:37.015Z"
+  },
+  "description": "Premium zip hoodie for women.",
+  "gender": "women",
+  "image": "https://images.unsplash.com/photo-1558618666-fcd25c85f0b9?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1558618666-fcd25c85f0b9?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "legacyId": "16",
+  "name": "Women Zip Hoodie",
+  "originalPrice": 3200,
+  "price": 3200,
+  "sizes": [
+    "XS",
+    "S",
+    "M",
+    "L"
+  ],
+  "stock": 100,
+  "subcategory": "Zip",
+  "updatedAt": {
+    "$date": "2026-08-11T10:11:02.283Z"
+  },
+  "isOnSale": false,
+  "purchasePrice": 1760
+},
+{
+  "_id": {
+    "$oid": "6a7ae8b170364a3dcbcca089"
+  },
+  "slug": "women-half-sleeve-shirt",
+  "__v": 0,
+  "badge": "SALE",
+  "category": "tshirts",
+  "createdAt": {
+    "$date": "2026-08-11T09:17:37.023Z"
+  },
+  "description": "Lightweight half sleeve shirt for women.",
+  "gender": "women",
+  "image": "https://images.unsplash.com/photo-1525507119028-ed4c629a60a6?w=400&h=400&fit=crop",
+  "images": [
+    "https://images.unsplash.com/photo-1525507119028-ed4c629a60a6?w=400&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=400&fit=crop"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "legacyId": "17",
+  "name": "Women Half Sleeve Shirt",
+  "originalPrice": 1300,
+  "price": 1000,
+  "sizes": [
+    "XS",
+    "S",
+    "M",
+    "L"
+  ],
+  "stock": 100,
+  "subcategory": "Half Sleeve",
+  "updatedAt": {
+    "$date": "2026-08-11T10:12:10.853Z"
+  },
+  "isOnSale": true,
+  "purchasePrice": 550
+},
+{
+  "_id": {
+    "$oid": "6a7afd23462caf2cc0bb37ca"
+  },
+  "name": "bolli",
+  "slug": "bolli",
+  "description": "bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli bolli ",
+  "price": 40000,
+  "purchasePrice": 4000,
+  "originalPrice": 50000,
+  "isOnSale": true,
+  "image": "http://localhost:5001/uploads/products/1786445072477-0a1f3775-aafc-4d4b-82bc-9aa2347647c0.png",
+  "images": [
+    "http://localhost:5001/uploads/products/1786445072477-0a1f3775-aafc-4d4b-82bc-9aa2347647c0.png"
+  ],
+  "category": "tshirts",
+  "subcategory": "",
+  "gender": "men",
+  "badge": "NEW",
+  "sizes": [
+    "XS",
+    "S",
+    "M",
+    "L"
+  ],
+  "stock": 3,
+  "isFeatured": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-08-11T10:44:51.873Z"
+  },
+  "updatedAt": {
+    "$date": "2026-08-11T20:44:49.954Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a7b005970364a3dcbcca08d"
+  },
+  "slug": "urban-mono-hoodie",
+  "__v": 0,
+  "badge": "NEW",
+  "category": "hoodies",
+  "createdAt": {
+    "$date": "2026-08-11T10:58:33.620Z"
+  },
+  "description": "A premium Komrez streetwear essential selected for the expanded collection.",
+  "gender": "unisex",
+  "image": "https://images.unsplash.com/photo-1724763626380-ee4188fdcf6f?auto=format&fit=crop&w=1000&q=85",
+  "images": [
+    "https://images.unsplash.com/photo-1724763626380-ee4188fdcf6f?auto=format&fit=crop&w=1000&q=85"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "isOnSale": false,
+  "name": "Urban Mono Hoodie",
+  "originalPrice": 0,
+  "price": 3490,
+  "purchasePrice": 1850,
+  "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "2XL"
+  ],
+  "stock": 24,
+  "subcategory": "",
+  "updatedAt": {
+    "$date": "2026-08-11T12:42:55.588Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a7b005970364a3dcbcca08e"
+  },
+  "slug": "concrete-grey-hoodie",
+  "__v": 0,
+  "badge": "NEW",
+  "category": "hoodies",
+  "createdAt": {
+    "$date": "2026-08-11T10:58:33.927Z"
+  },
+  "description": "A premium Komrez streetwear essential selected for the expanded collection.",
+  "gender": "men",
+  "image": "https://www.cruxclothingco.com/cdn/shop/files/dsc09980.jpg?v=1718622658",
+  "images": [
+    "https://www.cruxclothingco.com/cdn/shop/files/dsc09980.jpg?v=1718622658"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "isOnSale": false,
+  "name": "Concrete Grey Hoodie",
+  "originalPrice": 0,
+  "price": 3290,
+  "purchasePrice": 1725,
+  "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL"
+  ],
+  "stock": 18,
+  "subcategory": "",
+  "updatedAt": {
+    "$date": "2026-08-11T12:42:55.615Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a7b005970364a3dcbcca08f"
+  },
+  "slug": "neighborhood-graphic-tee",
+  "__v": 0,
+  "badge": "",
+  "category": "tshirts",
+  "createdAt": {
+    "$date": "2026-08-11T10:58:33.929Z"
+  },
+  "description": "A premium Komrez streetwear essential selected for the expanded collection.",
+  "gender": "unisex",
+  "image": "https://feature.com/cdn/shop/articles/ED-1.jpg?v=1677525480",
+  "images": [
+    "https://feature.com/cdn/shop/articles/ED-1.jpg?v=1677525480"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "isOnSale": false,
+  "name": "Neighborhood Graphic Tee",
+  "originalPrice": 0,
+  "price": 1890,
+  "purchasePrice": 920,
+  "sizes": [
+    "XS",
+    "S",
+    "M",
+    "L",
+    "XL"
+  ],
+  "stock": 32,
+  "subcategory": "",
+  "updatedAt": {
+    "$date": "2026-08-11T12:42:55.618Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a7b005970364a3dcbcca090"
+  },
+  "slug": "autumn-street-tee",
+  "__v": 0,
+  "badge": "",
+  "category": "tshirts",
+  "createdAt": {
+    "$date": "2026-08-11T10:58:33.931Z"
+  },
+  "description": "A premium Komrez streetwear essential selected for the expanded collection.",
+  "gender": "women",
+  "image": "https://thehundreds.com/cdn/shop/articles/d9dedc75-dadu_flat_13-scaled.jpg?v=1708026275&width=1200",
+  "images": [
+    "https://thehundreds.com/cdn/shop/articles/d9dedc75-dadu_flat_13-scaled.jpg?v=1708026275&width=1200"
+  ],
+  "isActive": true,
+  "isFeatured": true,
+  "isOnSale": false,
+  "name": "Autumn Street Tee",
+  "originalPrice": 0,
+  "price": 1790,
+  "purchasePrice": 875,
+  "sizes": [
+    "XS",
+    "S",
+    "M",
+    "L",
+    "XL"
+  ],
+  "stock": 26,
+  "subcategory": "",
+  "updatedAt": {
+    "$date": "2026-08-11T20:44:49.954Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a7b005970364a3dcbcca091"
+  },
+  "slug": "utility-crossbody-pack",
+  "__v": 0,
+  "badge": "",
+  "category": "accessories",
+  "createdAt": {
+    "$date": "2026-08-11T10:58:33.932Z"
+  },
+  "description": "A premium Komrez streetwear essential selected for the expanded collection.",
+  "gender": "unisex",
+  "image": "https://www.realismclo.com/cdn/shop/files/Surrealism_Edit_5_27ffcd3a-d87c-4885-a389-35dd21c154bc.jpg?v=1748570864&width=960",
+  "images": [
+    "https://www.realismclo.com/cdn/shop/files/Surrealism_Edit_5_27ffcd3a-d87c-4885-a389-35dd21c154bc.jpg?v=1748570864&width=960"
+  ],
+  "isActive": true,
+  "isFeatured": false,
+  "isOnSale": false,
+  "name": "Utility Crossbody Pack",
+  "originalPrice": 0,
+  "price": 2190,
+  "purchasePrice": 1100,
+  "sizes": [
+    "One Size"
+  ],
+  "stock": 16,
+  "subcategory": "",
+  "updatedAt": {
+    "$date": "2026-08-11T12:42:55.620Z"
+  }
+}]

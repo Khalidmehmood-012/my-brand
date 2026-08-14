@@ -1,16 +1,20 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import useCartStore from '@/lib/store'
 import useAuthStore from '@/lib/authStore'
 import CartDrawer from './CartDrawer'
 import MegaMenu from './MegaMenu'
-import products from '@/data/products'
+import useProducts from '@/lib/useProducts'
 import megaMenuData from '@/data/megamenu'
+import usePublicConfig from '@/lib/usePublicConfig'
+import NotificationBell from './NotificationBell'
+import useWishlistStore from '@/lib/wishlistStore'
+import { HeartIcon } from '@/components/products/WishlistButton'
 
-const navLinks = [
+const baseNavLinks = [
   { label: 'Home', href: '/', columns: [], images: [] },
   { label: 'Women', href: '/collections/women-tshirts', ...megaMenuData.women },
   { label: 'Men', href: '/collections/tshirts', ...megaMenuData.men },
@@ -20,6 +24,18 @@ const navLinks = [
 ]
 
 export default function Navbar() {
+  const { categories } = usePublicConfig()
+  const navLinks = useMemo(() => {
+    if (!categories.length) return baseNavLinks
+    const belongsTo = (category, section) => (category.sections?.length ? category.sections : category.slug === 'accessories' ? ['accessories'] : ['men', 'women']).includes(section)
+    return baseNavLinks.map((item) => {
+      const section = item.label.toLowerCase()
+      if (!['men', 'women', 'accessories'].includes(section)) return item
+      const relevant = categories.filter((category) => belongsTo(category, section))
+      const columns = relevant.map((category) => ({ heading: category.name, links: [{ name: `All ${section === 'women' ? 'Women ' : section === 'men' ? 'Men ' : ''}${category.name}`, href: `/collections/${category.slug}${section === 'accessories' ? '' : `?gender=${section}`}`, ...(category.label ? { badge: category.label } : {}) }, ...(category.subcategories || []).map((name) => ({ name, href: `/collections/${category.slug}?${section === 'accessories' ? '' : `gender=${section}&`}subcategory=${encodeURIComponent(name)}`, ...(category.subcategoryBadges?.[name] ? { badge: category.subcategoryBadges[name] } : {}) }))] }))
+      return columns.length ? { ...item, columns } : { ...item, columns: [] }
+    })
+  }, [categories])
   const pathname = usePathname()
   const router = useRouter()
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -33,12 +49,14 @@ export default function Navbar() {
   const timeoutRef = useRef(null)
   const items = useCartStore((state) => state.items)
   const totalItems = items.reduce((total, item) => total + item.quantity, 0)
+  const wishlistCount = useWishlistStore((state) => state.items.length)
+  const [wishlistMounted, setWishlistMounted] = useState(false)
   const { user, logout, initAuth } = useAuthStore()
+  const { products } = useProducts()
   const activeMenuItem = navLinks.find((item) => item.label === activeMenu)
 
-  useEffect(() => {
-    initAuth()
-  }, [initAuth])
+  useEffect(() => { void initAuth() }, [initAuth])
+  useEffect(() => { const timeout = setTimeout(() => setWishlistMounted(true), 0); return () => clearTimeout(timeout) }, [])
 
   useEffect(() => {
     if (!mobileOpen && !searchOpen) return
@@ -217,6 +235,8 @@ export default function Navbar() {
           </div>
 
           <div className="ml-auto flex items-center gap-0.5 sm:gap-1">
+            <NotificationBell user={user} />
+            <Link href="/wishlist" aria-label="Wishlist" className="relative flex h-10 w-10 items-center justify-center rounded-full text-black transition hover:bg-gray-100"><HeartIcon />{wishlistMounted && wishlistCount > 0 && <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-black px-1 text-[9px] font-black text-white">{wishlistCount}</span>}</Link>
             <button
               type="button"
               onClick={openSearch}

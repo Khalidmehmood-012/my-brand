@@ -1,8 +1,9 @@
 import Link from 'next/link'
-import products from '@/data/products'
+import { getProducts } from '@/lib/backend'
 import ProductCard from '@/components/products/ProductCard'
 
-export default function WomenPage() {
+export default async function WomenPage() {
+  const products = await getProducts('gender=women')
   const categories = [
     {
       name: 'T-Shirts',

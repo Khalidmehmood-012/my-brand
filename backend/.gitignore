@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Environment secrets (keep the template)
+.env
+.env.*
+!.env.example
+
+# Runtime/generated data
+uploads/
+logs/
+coverage/
+.nyc_output/
+dist/
+build/
+*.pid
+
+# Local Mongo/database exports
+dump/
+backups/
+*.bson
+*.metadata.json
+*.sqlite
+*.sqlite3
+*.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local editor/OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary/cache files
+.cache/
+*.tmp
+*.temp
+*.zip
+*.tar
+*.tar.gz

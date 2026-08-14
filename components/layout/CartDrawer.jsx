@@ -99,6 +99,7 @@ export default function CartDrawer({ open, onClose }) {
                   <p className="text-sm font-bold text-black mt-1">
                     Rs. {(item.price * item.quantity).toLocaleString()}
                   </p>
+                  {Number(item.stock) > 0 && Number(item.stock) <= 5 && <p className="mt-1 text-[9px] font-black uppercase text-red-600">Low stock · {item.stock} available</p>}
 
                   {/* Quantity */}
                   <div className="flex items-center gap-2 mt-2">
@@ -111,7 +112,8 @@ export default function CartDrawer({ open, onClose }) {
                     <span className="text-sm font-semibold text-black">{item.quantity}</span>
                     <button
                       onClick={() => increaseQty(item.id, item.selectedSize)}
-                      className="w-6 h-6 border border-gray-300 rounded-full text-sm text-black hover:bg-gray-100 transition flex items-center justify-center"
+                      disabled={Number(item.stock) > 0 && item.quantity >= Number(item.stock)}
+                      className="w-6 h-6 border border-gray-300 rounded-full text-sm text-black hover:bg-gray-100 transition flex items-center justify-center disabled:cursor-not-allowed disabled:border-gray-100 disabled:text-gray-200"
                     >
                       +
                     </button>

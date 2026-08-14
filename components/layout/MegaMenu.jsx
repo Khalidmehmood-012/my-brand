@@ -11,7 +11,9 @@ export default function MegaMenu({ item, onMouseEnter, onMouseLeave }) {
     >
       <div className={`mx-auto grid max-w-7xl gap-10 px-8 py-8 ${hasImages ? 'grid-cols-[minmax(0,1fr)_360px]' : 'grid-cols-1'}`}>
         <div className={`grid gap-10 ${
-          item.columns.length >= 3
+          item.columns.length >= 4
+            ? 'grid-cols-4'
+            : item.columns.length >= 3
             ? 'grid-cols-3'
             : item.columns.length === 2
               ? 'grid-cols-2'

@@ -1,239 +1,76 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import useAuthStore from '@/lib/authStore'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import useAuthStore, { getCustomerToken } from '@/lib/authStore'
+import { API_URL, backendRequest } from '@/lib/backend'
+import { toast } from '@/components/ui/ToastProvider'
+
+const tabs = ['Overview', 'Orders', 'Account', 'Security']
 
 export default function ProfilePage() {
   const router = useRouter()
-  const { user, loading, logout, initAuth } = useAuthStore()
+  const { user, loading, logout } = useAuthStore()
+  const [orders, setOrders] = useState([])
+  const [tab, setTab] = useState('Overview')
+  const [profile, setProfile] = useState({ name: '', phone: '' })
+  const [password, setPassword] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' })
+  const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [reviewTarget, setReviewTarget] = useState(null)
+  const [reviewForm, setReviewForm] = useState({ rating: 5, comment: '' })
+  const [reviewing, setReviewing] = useState(false)
+  const fileRef = useRef(null)
 
-  useEffect(() => {
-  const unsubscribe = initAuth()
-  return () => {
-    if (typeof unsubscribe === 'function') unsubscribe()
+  useEffect(() => { if (!loading && !user) router.replace('/login') }, [loading, user, router])
+  useEffect(() => { if (!user) return; const timeout = setTimeout(() => setProfile({ name: user.name || '', phone: user.phone || '' }), 0); backendRequest('/orders/mine?limit=100', { headers: authHeaders() }).then(({ data }) => setOrders(data)).catch((error) => toast('error', error.message, 'Unable to load account')); return () => clearTimeout(timeout) }, [user])
+
+  if (loading || !user) return <div className="flex min-h-screen items-center justify-center bg-white"><span className="h-12 w-12 animate-spin rounded-full border-2 border-gray-200 border-t-black" /></div>
+
+  const activeOrders = orders.filter((order) => !['cancelled', 'returned', 'delivered'].includes(order.status))
+  const deliveredOrders = orders.filter((order) => order.status === 'delivered')
+  const spent = orders.filter((order) => !['cancelled', 'returned'].includes(order.status)).reduce((sum, order) => sum + order.total, 0)
+  const initials = user.name?.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase()
+
+  const saveProfile = async (event) => {
+    event.preventDefault(); setSaving(true)
+    try { const { data } = await backendRequest('/auth/profile', { method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ ...profile, photo: user.photo || '' }) }); useAuthStore.setState({ user: data }); toast('success', 'Your profile has been updated.', 'Profile saved') } catch (error) { toast('error', error.message, 'Update failed') } finally { setSaving(false) }
   }
-}, [initAuth])
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login')
-    }
-  }, [user, loading, router])
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="relative">
-          <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-8 h-8 bg-black rounded-full" />
-          </div>
-        </div>
-      </div>
-    )
+  const uploadPhoto = async (file) => {
+    if (!file) return
+    setUploading(true)
+    try { const body = new FormData(); body.append('image', file); const response = await fetch(`${API_URL}/uploads/profile-image`, { method: 'POST', headers: authHeaders(), body }); const payload = await response.json(); if (!response.ok) throw new Error(payload.error?.message || 'Image upload failed.'); const result = await backendRequest('/auth/profile', { method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ ...profile, photo: payload.data.url }) }); useAuthStore.setState({ user: result.data }); toast('success', 'Your profile photo has been updated.', 'Photo updated') } catch (error) { toast('error', error.message, 'Upload failed') } finally { setUploading(false); if (fileRef.current) fileRef.current.value = '' }
   }
-
-  if (!user) return null
-
-  const handleLogout = async () => {
-    await logout()
-    router.push('/')
+  const changePassword = async (event) => {
+    event.preventDefault()
+    if (password.newPassword.length < 8) return toast('warning', 'Your new password must contain at least 8 characters.', 'Password too short')
+    if (password.newPassword !== password.confirmPassword) return toast('warning', 'New password and confirmation do not match.', 'Passwords do not match')
+    setSaving(true)
+    try { await backendRequest('/auth/password', { method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ currentPassword: password.currentPassword, newPassword: password.newPassword }) }); setPassword({ currentPassword: '', newPassword: '', confirmPassword: '' }); toast('success', 'Your password has been changed securely.', 'Password updated') } catch (error) { toast('error', error.message, 'Password update failed') } finally { setSaving(false) }
   }
+  const makeDefault = async (address) => { try { const { data } = await backendRequest(`/auth/addresses/${address._id}`, { method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ isDefault: true }) }); useAuthStore.setState({ user: data }); toast('success', `${address.label} is now your default address.`, 'Address updated') } catch (error) { toast('error', error.message, 'Address update failed') } }
+  const submitReview = async () => { if (reviewForm.comment.trim().length < 5) return toast('warning', 'Write at least 5 characters in your review.', 'Review incomplete'); setReviewing(true); try { await backendRequest('/reviews', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ orderId: reviewTarget.order._id, itemIndex: reviewTarget.itemIndex, ...reviewForm }) }); toast('success', 'Your verified review is now published.', 'Thank you'); setReviewTarget(null); setReviewForm({ rating: 5, comment: '' }) } catch (error) { toast('error', error.message, 'Review could not be submitted') } finally { setReviewing(false) } }
 
-  // Stats data
-  const stats = [
-    { label: 'Orders', value: '0', trend: '+0%' },
-    { label: 'Spent', value: 'Rs. 0', trend: '+0%' },
-    { label: 'Reviews', value: '0', trend: '+0%' },
-    { label: 'Wishlist', value: '0', trend: '+0%' },
-  ]
+  return <main className="min-h-screen bg-[#f4f4f1] text-gray-950">
+    <section className="border-b border-gray-200 bg-white"><div className="mx-auto max-w-7xl px-4 py-10 md:px-6"><div className="flex flex-col gap-7 md:flex-row md:items-center md:justify-between"><div className="flex items-center gap-5"><div className="relative"><div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-3xl bg-black text-2xl font-black text-white shadow-xl">{user.photo ? <img src={user.photo} alt={user.name} className="h-full w-full object-cover" /> : initials}</div><button onClick={() => fileRef.current?.click()} disabled={uploading} className="absolute -bottom-2 -right-2 flex h-9 w-9 items-center justify-center rounded-full border-4 border-white bg-black text-sm text-white shadow-lg" aria-label="Upload profile photo">{uploading ? '…' : '↥'}</button><input ref={fileRef} hidden type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(event) => uploadPhoto(event.target.files?.[0])} /></div><div><p className="text-[10px] font-black uppercase tracking-[.22em] text-gray-400">Customer account</p><h1 className="mt-1 text-3xl font-black tracking-tight text-black">{user.name}</h1><p className="mt-1 text-sm text-gray-500">{user.email}</p><span className="mt-3 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-black uppercase text-emerald-700"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />Active account</span></div></div><div className="flex gap-2"><Link href="/shop" className="rounded-xl border border-gray-300 bg-white px-5 py-3 text-xs font-black text-black">Continue shopping</Link><button onClick={async () => { await logout(); router.push('/') }} className="rounded-xl bg-black px-5 py-3 text-xs font-black text-white">Sign out</button></div></div><nav className="mt-9 flex gap-1 overflow-x-auto border-b border-gray-200">{tabs.map((item) => <button key={item} onClick={() => setTab(item)} className={`shrink-0 border-b-2 px-5 py-3 text-xs font-black transition ${tab === item ? 'border-black text-black' : 'border-transparent text-gray-400 hover:text-black'}`}>{item}</button>)}</nav></div></section>
 
-  // Recent activity data
-  const recentActivity = [
-    { id: 1, action: 'Browsed T-Shirts', time: '2 min ago' },
-    { id: 2, action: 'Added to wishlist', time: '1 hour ago' },
-    { id: 3, action: 'Viewed Hoodies', time: '3 hours ago' },
-  ]
-
-  return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-white">
-
-      {/* Hero Section - Modern Cover */}
-      <div className="relative bg-black text-white overflow-hidden">
-        {/* Abstract Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl" />
-        </div>
-        
-        <div className="relative max-w-7xl mx-auto px-6 py-16">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            {/* Left - Profile Info */}
-            <div className="flex items-center gap-6 w-full md:w-auto">
-              {/* Avatar with Ring */}
-              <div className="relative">
-                <div className="absolute inset-0 rounded-full bg-linear-to-r from-white/20 to-white/5 animate-pulse" />
-                <div className="relative w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-2xl">
-                  {user.photo ? (
-                    <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full bg-linear-to-br from-gray-700 to-gray-900 flex items-center justify-center text-5xl font-bold">
-                      {user.name?.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                </div>
-                <div className="absolute bottom-1 right-1 w-6 h-6 bg-green-500 rounded-full border-4 border-black" />
-              </div>
-
-              <div>
-                <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-                  {user.name}
-                </h1>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-gray-400 text-sm">{user.email}</span>
-                  <span className="w-1 h-1 bg-gray-600 rounded-full" />
-                  <span className="text-gray-500 text-xs">Member since {new Date().getFullYear()}</span>
-                </div>
-                <div className="flex items-center gap-3 mt-3">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 rounded-full text-xs">
-                    <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
-                    Active
-                  </span>
-                  <span className="text-xs text-gray-400">•</span>
-                  <span className="text-xs text-gray-400">Verified ✓</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right - Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-              <Link
-                href="/shop"
-                className="flex-1 md:flex-none px-6 py-3 bg-white text-black rounded-full text-sm font-bold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
-              >
-                Browse Store
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="flex-1 md:flex-none px-6 py-3 border border-white/30 text-white rounded-full text-sm font-bold hover:bg-white hover:text-black transition-all"
-              >
-                Sign Out
-              </button>
-            </div>
-          </div>
-
-          {/* Stats Bar - Floating Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
-            {stats.map((stat, index) => (
-              <div
-                key={stat.label}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/10 hover:bg-white/20 transition-all group"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <p className="text-2xl font-bold tracking-tight">{stat.value}</p>
-                <p className="text-xs text-gray-400 uppercase tracking-wider mt-1">{stat.label}</p>
-                <span className="inline-block mt-1 text-xs text-green-400">{stat.trend}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
-  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-    {/* Left Column - Quick Actions */}
-    <div className="lg:col-span-1 space-y-6">
-      {/* Quick Actions */}
-      <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-lg">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-black mb-4">Quick Actions</h3>
-        <div className="space-y-1">
-          {[
-            { label: 'Track Order', href: '/track-order' },
-            { label: 'Wishlist', href: '/wishlist' },
-            { label: 'My Reviews', href: '/reviews' },
-            { label: 'Support', href: '/support' },
-          ].map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-black hover:text-white transition-all duration-200 group border border-transparent hover:border-black"
-            >
-              <span className="text-sm font-medium text-gray-700 group-hover:text-white">{item.label}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-gray-400 group-hover:text-white transition-colors">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* Recent Activity */}
-      <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-lg">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-black mb-4">Recent Activity</h3>
-        <div className="space-y-3">
-          {recentActivity.map((activity) => (
-            <div key={activity.id} className="flex items-start gap-3 pb-3 border-b border-gray-200 last:border-0 last:pb-0">
-              <div className="w-2 h-2 mt-2 rounded-full bg-black shrink-0" />
-              <div>
-                <p className="text-sm font-medium text-gray-800">{activity.action}</p>
-                <p className="text-xs text-gray-500">{activity.time}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+    <div className="mx-auto max-w-7xl px-4 py-8 md:px-6">
+      {tab === 'Overview' && <div className="space-y-7"><div className="grid grid-cols-2 gap-3 lg:grid-cols-4"><Stat label="Total orders" value={orders.length} /><Stat label="Active orders" value={activeOrders.length} /><Stat label="Delivered" value={deliveredOrders.length} /><Stat label="Total spent" value={`Rs. ${spent.toLocaleString()}`} /></div><div className="grid gap-6 lg:grid-cols-[1.4fr_.6fr]"><Panel title="Recent orders" action={<button onClick={() => setTab('Orders')} className="text-xs font-black underline">View all</button>}>{orders.length ? <div className="divide-y divide-gray-100">{orders.slice(0, 3).map((order) => <CompactOrder key={order._id} order={order} />)}</div> : <EmptyOrders />}</Panel><Panel title="Account details"><dl className="space-y-4 text-sm"><Detail label="Full name" value={user.name} /><Detail label="Email address" value={user.email} /><Detail label="Phone number" value={user.phone || 'Not added'} /><Detail label="Saved addresses" value={String(user.addresses?.length || 0)} /></dl><button onClick={() => setTab('Account')} className="mt-6 w-full rounded-xl bg-black py-3 text-xs font-black text-white">Manage profile</button></Panel></div></div>}
+      {tab === 'Orders' && <Panel title="Order history" subtitle="Track purchases, review delivered products, and manage post-delivery support.">{orders.length ? <div className="space-y-4">{orders.map((order) => <OrderCard key={order._id} order={order} onReview={(itemIndex) => setReviewTarget({ order, itemIndex })} />)}</div> : <EmptyOrders />}</Panel>}
+      {tab === 'Account' && <div className="grid gap-6 lg:grid-cols-[.8fr_1.2fr]"><Panel title="Profile photo"><div className="flex flex-col items-center py-5 text-center"><div className="flex h-32 w-32 items-center justify-center overflow-hidden rounded-4xl bg-black text-3xl font-black text-white">{user.photo ? <img src={user.photo} alt={user.name} className="h-full w-full object-cover" /> : initials}</div><button onClick={() => fileRef.current?.click()} disabled={uploading} className="mt-5 rounded-xl border border-gray-300 px-5 py-3 text-xs font-black text-black">{uploading ? 'Uploading…' : 'Choose a new photo'}</button><p className="mt-3 text-xs leading-5 text-gray-400">JPG, PNG, WebP or AVIF. Maximum 5MB.</p></div></Panel><Panel title="Personal information"><form onSubmit={saveProfile} className="space-y-4"><Field label="Full name" value={profile.name} onChange={(value) => setProfile({ ...profile, name: value })} required /><Field label="Email address" value={user.email} disabled /><Field label="Phone number" value={profile.phone} onChange={(value) => setProfile({ ...profile, phone: value })} placeholder="03XXXXXXXXX" /><button disabled={saving} className="rounded-xl bg-black px-6 py-3 text-xs font-black text-white disabled:opacity-50">{saving ? 'Saving…' : 'Save changes'}</button></form></Panel><section className="lg:col-span-2"><Panel title="Saved addresses" subtitle="Your default address is selected automatically during checkout.">{user.addresses?.length ? <div className="grid gap-3 md:grid-cols-2">{user.addresses.map((address) => <article key={address._id} className={`rounded-2xl border p-5 ${address.isDefault ? 'border-black bg-gray-50' : 'border-gray-200'}`}><div className="flex items-center justify-between"><b className="text-sm text-black">{address.label}</b>{address.isDefault && <span className="rounded-full bg-black px-2.5 py-1 text-[9px] font-black uppercase text-white">Default</span>}</div><p className="mt-3 text-sm leading-6 text-gray-600">{address.name} · {address.phone}<br />{address.address}<br />{address.city}, {address.province}</p>{!address.isDefault && <button onClick={() => makeDefault(address)} className="mt-4 text-xs font-black text-black underline">Set as default</button>}</article>)}</div> : <p className="py-8 text-center text-sm text-gray-400">No saved addresses yet. You can save one during checkout.</p>}</Panel></section></div>}
+      {tab === 'Security' && <div className="mx-auto max-w-2xl"><Panel title="Change password" subtitle="Use a unique password with at least 8 characters. Google-only accounts can leave the current password blank."><form onSubmit={changePassword} className="space-y-4"><Field label="Current password" type="password" value={password.currentPassword} onChange={(value) => setPassword({ ...password, currentPassword: value })} required={!user.firebaseUid} /><Field label="New password" type="password" value={password.newPassword} onChange={(value) => setPassword({ ...password, newPassword: value })} required /><Field label="Confirm new password" type="password" value={password.confirmPassword} onChange={(value) => setPassword({ ...password, confirmPassword: value })} required /><button disabled={saving} className="w-full rounded-xl bg-black py-3.5 text-xs font-black text-white disabled:opacity-50">{saving ? 'Updating…' : user.firebaseUid ? 'Set or update password' : 'Update password'}</button></form></Panel></div>}
     </div>
-
-    {/* Right Column - Main Content */}
-    <div className="lg:col-span-2 space-y-6">
-
-      {/* Order History Preview */}
-      <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-lg">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-black">Recent Orders</h3>
-          <Link href="/orders" className="text-xs font-bold text-black hover:underline">
-            View All →
-          </Link>
-        </div>
-        <div className="text-center py-12">
-          <div className="w-20 h-20 rounded-full border-2 border-black flex items-center justify-center mx-auto mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-black">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-            </svg>
-          </div>
-          <p className="text-gray-500 text-sm mb-4">No orders placed yet</p>
-          <Link
-            href="/shop"
-            className="inline-block px-8 py-3 bg-black text-white rounded-xl text-sm font-bold hover:bg-gray-800 transition-all hover:scale-105"
-          >
-            Start Shopping
-          </Link>
-        </div>
-      </div>
-
-      {/* Recommended Products */}
-      <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-lg">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-black mb-4">Recommended For You</h3>
-        <div className="text-center py-12">
-          <div className="w-20 h-20 rounded-full border-2 border-black flex items-center justify-center mx-auto mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-black">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-            </svg>
-          </div>
-          <p className="text-gray-500 text-sm">No items recommended yet</p>
-          <p className="text-xs text-gray-400 mt-1">Start shopping to get personalized recommendations</p>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-</div>
-
-    </div>
-  )
+    {reviewTarget && <ReviewModal target={reviewTarget} form={reviewForm} setForm={setReviewForm} submitting={reviewing} close={() => setReviewTarget(null)} submit={submitReview} />}
+  </main>
 }
+
+const authHeaders = () => ({ Authorization: `Bearer ${getCustomerToken()}` })
+function Panel({ title, subtitle, action, children }) { return <section className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm md:p-7"><div className="mb-5 flex items-start justify-between gap-4"><div><h2 className="text-lg font-black text-black">{title}</h2>{subtitle && <p className="mt-1 text-xs leading-5 text-gray-500">{subtitle}</p>}</div>{action}</div>{children}</section> }
+function Stat({ label, value }) { return <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"><p className="text-2xl font-black text-black">{value}</p><p className="mt-1 text-[10px] font-black uppercase tracking-wider text-gray-400">{label}</p></div> }
+function Detail({ label, value }) { return <div className="flex justify-between gap-4 border-b border-gray-100 pb-3"><dt className="text-gray-400">{label}</dt><dd className="text-right font-bold text-black">{value}</dd></div> }
+function Field({ label, value, onChange, type = 'text', ...props }) { return <label className="block text-xs font-black uppercase tracking-wide text-gray-500">{label}<input type={type} value={value} onChange={(event) => onChange?.(event.target.value)} className="mt-2 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-medium normal-case text-black outline-none focus:border-black disabled:bg-gray-100 disabled:text-gray-500" {...props} /></label> }
+function CompactOrder({ order }) { return <div className="flex flex-wrap items-center justify-between gap-3 py-4"><div><p className="text-sm font-black text-black">{order.orderNumber}</p><p className="mt-1 text-xs text-gray-400">{new Date(order.createdAt).toLocaleDateString()} · {order.items.length} item{order.items.length === 1 ? '' : 's'}</p></div><div className="text-right"><span className="rounded-full bg-gray-100 px-3 py-1 text-[10px] font-black capitalize text-gray-700">{order.status.replaceAll('-', ' ')}</span><p className="mt-2 text-sm font-black text-black">Rs. {order.total.toLocaleString()}</p></div></div> }
+function OrderCard({ order, onReview }) { return <article className="overflow-hidden rounded-2xl border border-gray-200"><header className="flex flex-wrap items-center justify-between gap-3 bg-gray-50 px-5 py-4"><div><p className="text-sm font-black text-black">{order.orderNumber}</p><p className="mt-1 text-xs text-gray-400">Placed {new Date(order.createdAt).toLocaleDateString()}</p></div><div className="text-right"><span className="rounded-full bg-black px-3 py-1 text-[10px] font-black capitalize text-white">{order.status.replaceAll('-', ' ')}</span><p className="mt-2 text-sm font-black text-black">Rs. {order.total.toLocaleString()}</p></div></header><div className="divide-y divide-gray-100 px-5">{order.items.map((item, index) => <div key={`${item.productId}-${index}`} className="flex items-center gap-4 py-4"><img src={item.image || '/favicon.ico'} alt={item.name} className="h-16 w-16 rounded-xl bg-gray-100 object-cover" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-black text-black">{item.name}</p><p className="mt-1 text-xs text-gray-500">Size {item.selectedSize || '—'} · Qty {item.quantity}</p>{order.status === 'delivered' && item.product && <button onClick={() => onReview(index)} className="mt-2 text-[10px] font-black uppercase text-black underline">Write a review</button>}</div><b className="text-sm text-black">Rs. {(item.price * item.quantity).toLocaleString()}</b></div>)}</div></article> }
+function EmptyOrders() { return <div className="py-12 text-center"><div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-2xl">◎</div><p className="mt-4 font-black text-black">No orders yet</p><Link href="/shop" className="mt-4 inline-flex rounded-xl bg-black px-5 py-3 text-xs font-black text-white">Start shopping</Link></div> }
+function ReviewModal({ target, form, setForm, submitting, close, submit }) { return <div className="fixed inset-0 z-120 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"><button className="absolute inset-0" onClick={close} aria-label="Close review" /><section className="relative w-full max-w-lg rounded-3xl bg-white p-7 shadow-2xl"><button onClick={close} className="absolute right-5 top-5 h-9 w-9 rounded-full bg-gray-100 text-xl">×</button><p className="text-[10px] font-black uppercase tracking-[.2em] text-gray-400">Verified purchase</p><h2 className="mt-2 pr-10 text-2xl font-black text-black">Review {target.order.items[target.itemIndex].name}</h2><div className="mt-6 flex gap-2">{[1,2,3,4,5].map((star) => <button key={star} onClick={() => setForm({ ...form, rating: star })} className={`text-3xl ${star <= form.rating ? 'text-amber-400' : 'text-gray-200'}`}>★</button>)}</div><textarea value={form.comment} onChange={(event) => setForm({ ...form, comment: event.target.value })} rows={5} placeholder="Share your thoughts on quality, fit, and overall experience." className="mt-5 w-full rounded-2xl border border-gray-300 p-4 text-sm text-black outline-none focus:border-black" /><button disabled={submitting} onClick={submit} className="mt-4 w-full rounded-xl bg-black py-3.5 text-sm font-black text-white disabled:opacity-50">{submitting ? 'Publishing…' : 'Publish review'}</button></section></div> }

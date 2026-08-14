@@ -94,16 +94,19 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import banners from '@/data/banners'
+import usePublicConfig from '@/lib/usePublicConfig'
 
 export default function HeroBanner() {
+  const { settings } = usePublicConfig()
+  const slides = settings.hero?.slides?.length ? settings.hero.slides : banners
   const [current, setCurrent] = useState(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % banners.length)
+      setCurrent((prev) => (prev + 1) % slides.length)
     }, 6000)
     return () => clearInterval(interval)
-  }, [])
+  }, [slides.length])
 
   // Scroll to CategoryGrid function
   const handleShopNowClick = (e) => {
@@ -121,7 +124,7 @@ export default function HeroBanner() {
     <div className="relative w-full h-125 md:h-150 lg:h-175 overflow-hidden bg-black">
 
       {/* Slides */}
-      {banners.map((banner, index) => {
+      {slides.map((banner, index) => {
         // Check if this is the Sale slide
         const isSaleSlide = banner.title?.toLowerCase().includes('summer sale')
         
@@ -252,7 +255,7 @@ export default function HeroBanner() {
 
       {/* Navigation - Side Dots */}
       <div className="absolute right-6 md:right-10 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-20">
-        {banners.map((_, index) => (
+        {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrent(index)}
@@ -276,7 +279,7 @@ export default function HeroBanner() {
       <div className="absolute bottom-0 left-0 right-0 h-1 z-20">
         <div 
           className="h-full bg-linear-to-r from-white via-white/50 to-transparent transition-all duration-6000ms ease-linear"
-          style={{ width: `${((current + 1) / banners.length) * 100}%` }}
+          style={{ width: `${((current + 1) / slides.length) * 100}%` }}
         />
       </div>
 

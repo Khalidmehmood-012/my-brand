@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+.input { margin-top: .25rem; width: 100%; border: 1px solid #d1d5db; border-radius: .75rem; padding: .75rem; color: #111827; outline: none; background: white; }
+.input:focus { border-color: #111827; box-shadow: 0 0 0 2px rgb(17 24 39 / .08); }
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -23,4 +26,15 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-12px) scale(.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes loader-slide {
+  0% { transform: translateX(-110%); }
+  50% { transform: translateX(110%); }
+  100% { transform: translateX(230%); }
 }

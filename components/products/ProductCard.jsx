@@ -135,19 +135,26 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import useCartStore from '@/lib/store'
+import WishlistButton from './WishlistButton'
+import { toast } from '@/components/ui/ToastProvider'
+import QuickViewModal from './QuickViewModal'
 
 export default function ProductCard({ product }) {
   const addItem = useCartStore((state) => state.addItem)
-  const [added, setAdded] = useState(false)
+  const cartItems = useCartStore((state) => state.items)
   const [isHovered, setIsHovered] = useState(false)
+  const [quickViewOpen, setQuickViewOpen] = useState(false)
 
-  // Images array - pehli image front, doosri image back/model
+  // The first image is the primary view; the second is used on hover.
   const images = product.images || [product.image]
+  const reserved = cartItems.filter((item) => item.id === product.id).reduce((sum, item) => sum + item.quantity, 0)
+  const available = Math.max(0, Number(product.stock || 0) - reserved)
+  const unavailable = available <= 0
 
   const handleAddToCart = () => {
-    addItem(product, product.sizes[0])
-    setAdded(true)
-    setTimeout(() => setAdded(false), 1500)
+    if (unavailable) return toast('warning', 'All available stock is already reserved in your cart.', 'Stock reserved')
+    addItem(product, product.sizes?.[0] || 'One Size')
+    toast('success', `${product.name} has been added to your cart.`, 'Added to cart')
   }
   return (
     <div 
@@ -156,8 +163,9 @@ export default function ProductCard({ product }) {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image Container */}
-      <Link href={`/products/${product.slug}`}>
-        <div className="relative aspect-square overflow-hidden bg-gray-100">
+      <div className="relative aspect-square overflow-hidden bg-gray-100">
+        <Link href={`/products/${product.slug}`} aria-label={`View ${product.name}`} className="block h-full cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+        <div className="relative h-full">
           
           {/* Front Image */}
           <img
@@ -185,12 +193,9 @@ export default function ProductCard({ product }) {
           }`} />
 
           {/* Quick View + Size Availability on Hover */}
-          <div className={`absolute inset-0 flex flex-col items-center justify-center gap-2 transition-all duration-300 ${
+          <div className={`pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 transition-all duration-300 ${
             isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
           }`}>
-            <span className="bg-white text-black text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full hover:bg-black hover:text-white transition-all duration-300">
-              Quick View
-            </span>
             
             {/* Size Availability - Quick View */}
             <div className="flex flex-wrap gap-1.5 justify-center mt-1">
@@ -224,7 +229,6 @@ export default function ProductCard({ product }) {
               </span>
             </div>
           )}
-
           {/* Discount Badge */}
           {product.originalPrice > product.price && (
             <div className="absolute bottom-2 left-2">
@@ -234,7 +238,10 @@ export default function ProductCard({ product }) {
             </div>
           )}
         </div>
-      </Link>
+        </Link>
+        <button type="button" onClick={() => setQuickViewOpen(true)} className={`absolute bottom-3 left-1/2 z-20 -translate-x-1/2 rounded-full bg-white px-4 py-2 text-[9px] font-black uppercase tracking-widest text-black shadow-xl transition-all duration-300 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:px-5 md:py-2.5 md:text-xs ${isHovered ? 'md:scale-100 md:opacity-100' : 'md:pointer-events-none md:scale-90 md:opacity-0'}`}>Quick view</button>
+        <WishlistButton product={product} compact className="absolute right-3 top-3 z-20 shadow-md" />
+      </div>
 
       {/* Info */}
       <div className="p-2 md:p-4">
@@ -253,33 +260,21 @@ export default function ProductCard({ product }) {
             </p>
           )}
         </div>
+        {product.stock > 0 && product.stock <= 5 && <p className="mt-2 text-[10px] font-black uppercase text-red-600">Only {available} of {product.stock} left</p>}
 
         {/* Buttons */}
         <div className="flex gap-1 md:gap-2 mt-2 md:mt-4">
-          <button
+          {!unavailable ? <button
             onClick={handleAddToCart}
-            className={`flex-1 py-1.5 md:py-2.5 rounded-lg md:rounded-xl text-[10px] md:text-sm font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1 ${
-              added
-                ? 'bg-green-500 text-white'
-                : 'bg-black text-white hover:bg-gray-800 active:scale-95'
-            }`}
+            className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-black py-1.5 text-[10px] font-bold uppercase tracking-wider text-white transition-all duration-300 hover:bg-gray-800 active:scale-95 md:rounded-xl md:py-2.5 md:text-sm"
           >
-            {added ? (
-              <>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 md:w-4 md:h-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                </svg>
-                <span className="hidden xs:inline">Added</span>
-              </>
-            ) : (
               <>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3 md:w-4 md:h-4">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                 </svg>
                 <span className="hidden xs:inline">Add</span>
               </>
-            )}
-          </button>
+          </button> : <WishlistButton product={product} className="flex-1 rounded-lg! py-1.5! text-[10px] md:rounded-xl! md:py-2.5! md:text-xs" />}
           <Link
             href={`/products/${product.slug}`}
             className="flex-1 border-2 border-black text-black py-1.5 md:py-2.5 rounded-lg md:rounded-xl text-[10px] md:text-sm font-bold uppercase tracking-wider text-center hover:bg-black hover:text-white transition-all duration-300"
@@ -289,6 +284,8 @@ export default function ProductCard({ product }) {
           </Link>
         </div>
       </div>
+
+      <QuickViewModal product={product} open={quickViewOpen} onClose={() => setQuickViewOpen(false)} />
 
     </div>
   )

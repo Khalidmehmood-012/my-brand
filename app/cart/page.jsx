@@ -3,6 +3,7 @@
 import useCartStore from '@/lib/store'
 import Link from 'next/link'
 import Breadcrumb from '@/components/ui/Breadcrumb'
+import { useRouter } from 'next/navigation'
 
 export default function CartPage() {
   const items = useCartStore((state) => state.items)
@@ -10,6 +11,7 @@ export default function CartPage() {
   const increaseQty = useCartStore((state) => state.increaseQty)
   const decreaseQty = useCartStore((state) => state.decreaseQty)
   const clearCart = useCartStore((state) => state.clearCart)
+  const router = useRouter()
 
   const totalPrice = items.reduce(
     (total, i) => total + i.price * i.quantity,
@@ -96,6 +98,7 @@ export default function CartPage() {
                     <p className="text-xl font-black text-black mt-2">
                       Rs. {(item.price * item.quantity).toLocaleString()}
                     </p>
+                    {Number(item.stock) > 0 && Number(item.stock) <= 5 && <p className="mt-1 text-[10px] font-black uppercase tracking-wide text-red-600">Low stock · only {item.stock} available</p>}
 
                     {/* Quantity */}
                     <div className="flex items-center gap-3 mt-3">
@@ -110,7 +113,8 @@ export default function CartPage() {
                       </span>
                       <button
                         onClick={() => increaseQty(item.id, item.selectedSize)}
-                        className="w-8 h-8 border-2 border-gray-200 rounded-full text-black font-bold hover:border-black hover:bg-black hover:text-white transition flex items-center justify-center text-lg"
+                        disabled={Number(item.stock) > 0 && item.quantity >= Number(item.stock)}
+                        className="w-8 h-8 border-2 border-gray-200 rounded-full text-black font-bold hover:border-black hover:bg-black hover:text-white transition flex items-center justify-center text-lg disabled:cursor-not-allowed disabled:border-gray-100 disabled:text-gray-200 disabled:hover:bg-white"
                       >
                         +
                       </button>
@@ -158,7 +162,7 @@ export default function CartPage() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400 text-sm">Shipping</span>
-                    <span className="font-bold text-green-500 text-sm">FREE</span>
+                    <span className="font-bold text-gray-700 text-sm">Calculated at checkout</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400 text-sm">Discount</span>
@@ -176,7 +180,7 @@ export default function CartPage() {
                 {/* Free shipping notice */}
                 {totalPrice < 2000 && (
                   <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 mb-4 text-xs text-yellow-700 font-semibold">
-                    🚚 Add Rs. {(2000 - totalPrice).toLocaleString()} more for FREE shipping!
+                    🚚 Shipping is calculated from your Pakistan province and city. Add Rs. {(2000 - totalPrice).toLocaleString()} more for free shipping.
                   </div>
                 )}
                 {totalPrice >= 2000 && (
@@ -185,12 +189,13 @@ export default function CartPage() {
                   </div>
                 )}
 
-                <Link
-                  href="/checkout"
+                <button
+                  type="button"
+                  onClick={() => router.push('/checkout')}
                   className="block w-full bg-black text-white text-center py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-gray-800 transition mb-3"
                 >
                   Proceed to Checkout →
-                </Link>
+                </button>
 
                 <Link
                   href="/shop"

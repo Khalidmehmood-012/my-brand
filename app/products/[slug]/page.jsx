@@ -1,23 +1,28 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { use } from 'react'
 import { notFound, useRouter } from 'next/navigation'
-import products from '@/data/products'
+import useProducts from '@/lib/useProducts'
 import Breadcrumb from '@/components/ui/Breadcrumb'
 import Badge from '@/components/ui/Badge'
 import ProductGrid from '@/components/products/ProductGrid'
 import useCartStore from '@/lib/store'
+import WishlistButton from '@/components/products/WishlistButton'
+import { toast } from '@/components/ui/ToastProvider'
+import { backendRequest } from '@/lib/backend'
 
 export default function ProductDetailPage({ params }) {
+  const { products, loading } = useProducts()
   const router = useRouter()
   const { slug } = use(params)
   const product = products.find((p) => p.slug === slug)
   const [selectedSize, setSelectedSize] = useState(null)
   const [selectedImage, setSelectedImage] = useState(0)
-  const [added, setAdded] = useState(false)
   const addItem = useCartStore((state) => state.addItem)
+  const cartItems = useCartStore((state) => state.items)
 
+  if (!product && loading) return <div className="min-h-screen flex items-center justify-center"><span className="w-10 h-10 rounded-full border-2 border-gray-200 border-t-black animate-spin" /></div>
   if (!product) return notFound()
 
   const related = products.filter(
@@ -25,20 +30,24 @@ export default function ProductDetailPage({ params }) {
   )
 
 const images = product.images && product.images.length > 0 ? product.images : [product.image]
+  const reserved = cartItems.filter((item) => item.id === product.id).reduce((sum, item) => sum + item.quantity, 0)
+  const available = Math.max(0, Number(product.stock || 0) - reserved)
+  const stockReserved = available <= 0
 
   const discount = product.originalPrice > product.price
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : null
 
   const handleAddToCart = () => {
-    if (!selectedSize) return
+    if (!selectedSize) return toast('warning', 'Select a size before adding this product to your cart.', 'Select a size')
+    if (stockReserved) return toast('warning', 'All available stock is already reserved in your cart.', 'Stock reserved')
     addItem(product, selectedSize)
-    setAdded(true)
-    setTimeout(() => setAdded(false), 2000)
+    toast('success', `${product.name} has been added to your cart.`, 'Added to cart')
   }
 
   const handleBuyNow = () => {
-    if (!selectedSize) return
+    if (!selectedSize) return toast('warning', 'Select a size before using Buy Now.', 'Select a size')
+    if (stockReserved) return toast('warning', 'All available stock is already reserved in your cart.', 'Stock reserved')
     addItem(product, selectedSize)
     router.push('/cart')
   }
@@ -134,6 +143,7 @@ const images = product.images && product.images.length > 0 ? product.images : [p
             <p className="text-gray-600 text-sm leading-relaxed border-l-4 border-black pl-4">
               {product.description}
             </p>
+            {product.stock > 0 && product.stock <= 5 && <div className={`rounded-2xl border p-4 ${available ? 'border-red-200 bg-red-50 text-red-700' : 'border-gray-300 bg-gray-100 text-gray-700'}`}><p className="text-xs font-black uppercase tracking-wider">{available ? `Low stock — only ${available} left` : `All ${product.stock} available units are in your cart`}</p><p className="mt-1 text-xs opacity-75">Total stock: {product.stock} · In your cart: {reserved}</p></div>}
 
             <hr className="border-gray-100" />
 
@@ -162,49 +172,30 @@ const images = product.images && product.images.length > 0 ? product.images : [p
                   </button>
                 ))}
               </div>
-              {!selectedSize && (
-                <p className="text-xs text-red-400 mt-2 flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                  </svg>
-                  Please select a size to continue
-                </p>
-              )}
             </div>
 
             {/* Buttons */}
             <div className="flex flex-col gap-3">
               {/* Add to Cart */}
-              <button
+              {!stockReserved ? <button
                 onClick={handleAddToCart}
                 disabled={!selectedSize}
                 className={`w-full py-4 rounded-2xl text-sm font-bold uppercase tracking-widest transition-all duration-200 flex items-center justify-center gap-2 ${
-                  added
-                    ? 'bg-green-500 text-white'
-                    : selectedSize
+                  selectedSize
                     ? 'bg-black text-white hover:bg-gray-800 active:scale-95'
                     : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                 }`}
               >
-                {added ? (
-                  <>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                    </svg>
-                    Added to Cart!
-                  </>
-                ) : (
                   <>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="w-5 h-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
                     </svg>
                     Add to Cart
                   </>
-                )}
-              </button>
+              </button> : <WishlistButton product={product} />}
 
               {/* Buy Now */}
-              <button
+              {!stockReserved && <button
                 onClick={handleBuyNow}
                 disabled={!selectedSize}
                 className={`w-full py-4 rounded-2xl text-sm font-bold uppercase tracking-widest transition-all duration-200 flex items-center justify-center gap-2 ${
@@ -217,7 +208,8 @@ const images = product.images && product.images.length > 0 ? product.images : [p
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
                 </svg>
                 Buy Now
-              </button>
+              </button>}
+              {!stockReserved && <WishlistButton product={product} />}
             </div>
 
             {/* Features */}
@@ -266,6 +258,8 @@ const images = product.images && product.images.length > 0 ? product.images : [p
           </div>
         </div>
 
+        <ReviewsSection productId={product.id} />
+
         {/* Related Products */}
         {related.length > 0 && (
           <div className="mt-20">
@@ -279,4 +273,11 @@ const images = product.images && product.images.length > 0 ? product.images : [p
       </div>
     </div>
   )
+}
+
+function ReviewsSection({ productId }) {
+  const [reviews, setReviews] = useState([])
+  const [summary, setSummary] = useState({ total: 0, average: 0 })
+  useEffect(() => { let active = true; backendRequest(`/reviews/product/${productId}`).then((payload) => { if (active) { setReviews(payload.data); setSummary(payload.meta || {}) } }).catch(() => {}); return () => { active = false } }, [productId])
+  return <section className="mt-20 border-t border-gray-200 pt-12"><div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-xs font-black uppercase tracking-[.2em] text-gray-400">Verified customers</p><h2 className="mt-2 text-3xl font-black text-black">Product reviews</h2></div><div className="flex items-center gap-3"><span className="text-2xl tracking-wider text-amber-400">{'★'.repeat(Math.round(summary.average || 0))}{'☆'.repeat(5 - Math.round(summary.average || 0))}</span><b className="text-sm text-black">{summary.average || 'New'} · {summary.total || 0} reviews</b></div></div>{reviews.length ? <div className="mt-8 grid gap-4 md:grid-cols-2">{reviews.map((review) => <article key={review._id} className="rounded-2xl border border-gray-200 bg-gray-50 p-5"><div className="flex items-center justify-between"><b className="text-sm text-black">{review.customerName}</b><span className="text-sm text-amber-500">{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span></div><p className="mt-3 text-sm leading-6 text-gray-600">{review.comment}</p><div className="mt-4 flex items-center justify-between text-[10px] font-bold uppercase text-gray-400"><span>✓ Verified purchase</span><span>{new Date(review.createdAt).toLocaleDateString()}</span></div></article>)}</div> : <div className="mt-8 rounded-2xl border-2 border-dashed border-gray-200 p-10 text-center text-sm text-gray-500">No reviews yet. Verified customers can review products after delivery.</div>}</section>
 }

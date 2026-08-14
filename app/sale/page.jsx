@@ -4,17 +4,18 @@ import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import ProductGrid from '@/components/products/ProductGrid'
 import Breadcrumb from '@/components/ui/Breadcrumb'
-import products from '@/data/products'
+import useProducts from '@/lib/useProducts'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
 function SaleContent() {
+  const { products } = useProducts()
   const searchParams = useSearchParams()
   const discountParam = searchParams.get('discount')
   
   const [selectedDiscount, setSelectedDiscount] = useState(discountParam || 'all')
 
-  // Sirf wo products jo sale pe hain
+  // Display products that are currently on sale.
   const saleProducts = products.filter(
     (p) => p.originalPrice > p.price
   )

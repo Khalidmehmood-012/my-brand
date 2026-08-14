@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  agentRules: false,
+  async rewrites() {
+    const backend = process.env.BACKEND_API_URL || 'https://komrez.fleximagepro.com/api'
+    return [{ source: '/backend-api/:path*', destination: `${backend}/:path*` }]
+  },
   images: {
     remotePatterns: [
       {

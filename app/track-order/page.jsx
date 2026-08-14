@@ -3,41 +3,47 @@
 import { useState } from 'react'
 import Breadcrumb from '@/components/ui/Breadcrumb'
 import Link from 'next/link'
+import { backendRequest } from '@/lib/backend'
+import { toast } from '@/components/ui/ToastProvider'
 
 export default function TrackOrderPage() {
   const [orderId, setOrderId] = useState('')
   const [tracked, setTracked] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
 
-  const handleTrack = () => {
+  const handleTrack = async () => {
     if (!orderId) {
-      setError('Please enter your Order ID')
+      toast('warning', 'Please enter your Order ID.', 'Order ID required')
       return
     }
-    setError('')
     setLoading(true)
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const { data } = await backendRequest(`/orders/track/${encodeURIComponent(orderId.trim())}`)
+      setTracked(data)
+    } catch (requestError) {
+      setTracked(false)
+      toast('error', requestError.message, 'Order not found')
+    } finally {
       setLoading(false)
-      setTracked(true)
-    }, 1500)
+    }
   }
 
-  // Sample order status - yeh backend se aayega
-  const orderStatus = {
-    id: orderId || 'MB-12345',
-    status: 'In Transit',
-    estimatedDelivery: '2-3 Working Days',
-    steps: [
-      { label: 'Order Placed', date: '2024-01-15 10:30 AM', done: true },
-      { label: 'Order Confirmed', date: '2024-01-15 02:00 PM', done: true },
-      { label: 'Shipped', date: '2024-01-16 09:00 AM', done: true },
-      { label: 'Out for Delivery', date: '2024-01-17 08:00 AM', done: false },
-      { label: 'Delivered', date: 'Pending', done: false },
-    ]
-  }
+  const timeline = ['pending', 'confirmed', 'processing', 'shipped', 'out-for-delivery', 'delivered']
+  const currentIndex = tracked ? timeline.indexOf(tracked.status) : -1
+  const orderStatus = tracked ? {
+    id: tracked.orderNumber,
+    status: tracked.status.replaceAll('-', ' '),
+    estimatedDelivery: tracked.status === 'delivered' ? 'Delivered' : '2-5 Working Days',
+    steps: timeline.map((status, index) => {
+      const history = tracked.statusHistory?.find((item) => item.status === status)
+      return {
+        label: status.replaceAll('-', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()),
+        date: history ? new Date(history.changedAt).toLocaleString() : 'Pending',
+        done: index <= currentIndex,
+      }
+    }),
+  } : null
 
   return (
     <div className="bg-white min-h-screen">
@@ -78,7 +84,6 @@ export default function TrackOrderPage() {
                 onChange={(e) => {
                   setOrderId(e.target.value)
                   setTracked(false)
-                  setError('')
                 }}
                 placeholder="Enter your Order ID (e.g. MB-12345)"
                 className="w-full border-2 border-gray-200 rounded-xl pl-12 pr-4 py-3.5 text-sm text-black outline-none focus:border-black transition placeholder:text-gray-400 bg-white"
@@ -107,14 +112,6 @@ export default function TrackOrderPage() {
               )}
             </button>
           </div>
-          {error && (
-            <p className="text-red-500 text-xs mt-3 flex items-center gap-1">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-              </svg>
-              {error}
-            </p>
-          )}
         </div>
 
         {/* Tracking Result */}

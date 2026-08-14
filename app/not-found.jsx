@@ -1,0 +1,2 @@
+import Link from 'next/link'
+export default function NotFound() { return <main className="flex min-h-[70vh] items-center justify-center px-4 text-center"><div><p className="text-7xl font-black text-gray-100">404</p><h1 className="text-3xl font-black">We could not find that item</h1><p className="mt-2 text-gray-500">It may have moved or is no longer available.</p><Link href="/shop" className="mt-6 inline-block rounded-xl bg-black px-6 py-3 text-sm font-bold text-white">Browse products</Link></div></main> }
