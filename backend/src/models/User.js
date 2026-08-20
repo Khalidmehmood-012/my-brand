@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
   }],
   role: { type: String, enum: ['customer', 'admin', 'staff'], default: 'customer', index: true },
   isActive: { type: Boolean, default: true },
+  archivedAt: { type: Date, default: null, index: true },
   totalOrders: { type: Number, default: 0, min: 0 },
   totalSpent: { type: Number, default: 0, min: 0 },
   lastLoginAt: Date,
