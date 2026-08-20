@@ -84,7 +84,7 @@ export default function PromoSection() {
 
         {/* Promo 1 — Men's Collection */}
         <Link
-          href="/sale?discount=30"
+          href="/sale?gender=men"
           className="group relative rounded-2xl overflow-hidden h-80 ring-1 ring-black/5 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-black/10"
         >
           <div className="absolute inset-0">
@@ -127,7 +127,7 @@ export default function PromoSection() {
 
         {/* Promo 2 — Women's Collection */}
         <Link
-          href="/sale?discount=40"
+          href="/sale?gender=women"
           className="group relative rounded-2xl overflow-hidden h-80 ring-1 ring-black/5 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-black/10"
         >
           <div className="absolute inset-0">

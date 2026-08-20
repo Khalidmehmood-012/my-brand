@@ -17,12 +17,13 @@ router.get('/product/:productId', asyncHandler(async (request, response) => {
 }))
 
 router.post('/', authenticate, asyncHandler(async (request, response) => {
-  const result = z.object({ orderId: z.string().min(1), itemIndex: z.coerce.number().int().min(0), rating: z.coerce.number().int().min(1).max(5), comment: z.string().trim().min(5).max(1000) }).safeParse(request.body)
+  const result = z.object({ orderId: z.string().min(1), itemIndex: z.coerce.number().int().min(0), rating: z.coerce.number().int().min(1).max(5), comment: z.string().trim().min(5).max(1000), images: z.array(z.string().url()).max(3).optional().default([]) }).safeParse(request.body)
   if (!result.success) throw new AppError(422, 'VALIDATION_ERROR', 'Review data is invalid.', result.error.issues)
   const order = await Order.findOne({ _id: result.data.orderId, user: request.user.id, status: 'delivered' })
   const item = order?.items?.[result.data.itemIndex]
   if (!order || !item || item.isCustom) throw new AppError(404, 'REVIEW_NOT_ALLOWED', 'Only delivered products can be reviewed.')
   const legacyProductKeys = [
+    ...(item.productId && /^[a-f\d]{24}$/i.test(item.productId) ? [{ _id: item.productId }] : []),
     ...(item.productId ? [{ legacyId: item.productId }] : []),
     ...(item.slug ? [{ slug: item.slug }] : []),
   ]

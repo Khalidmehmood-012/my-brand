@@ -8,6 +8,7 @@ const reviewSchema = new mongoose.Schema({
   customerName: { type: String, required: true, maxlength: 120 },
   rating: { type: Number, required: true, min: 1, max: 5 },
   comment: { type: String, required: true, trim: true, minlength: 5, maxlength: 1000 },
+  images: { type: [String], default: [], validate: [(value) => value.length <= 3, 'A review can contain up to 3 images.'] },
   isVerifiedPurchase: { type: Boolean, default: true },
   isApproved: { type: Boolean, default: true, index: true },
 }, { timestamps: true })

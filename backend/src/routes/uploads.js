@@ -40,4 +40,10 @@ router.post('/profile-image', authenticate, upload.single('image'), asyncHandler
   return success(response, { url: `${baseUrl}/uploads/products/${request.file.filename}` }, 201)
 }))
 
+router.post('/review-images', authenticate, upload.array('images', 3), asyncHandler(async (request, response) => {
+  if (!request.files?.length) throw new AppError(422, 'IMAGE_REQUIRED', 'Select at least one supported review image.')
+  const baseUrl = `${request.protocol}://${request.get('host')}`
+  return success(response, request.files.map((file) => ({ url: `${baseUrl}/uploads/products/${file.filename}` })), 201)
+}))
+
 export default router

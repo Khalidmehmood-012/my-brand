@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import ProductGrid from '@/components/products/ProductGrid'
 import Breadcrumb from '@/components/ui/Breadcrumb'
@@ -11,9 +10,8 @@ import { Suspense } from 'react'
 function SaleContent() {
   const { products } = useProducts()
   const searchParams = useSearchParams()
-  const discountParam = searchParams.get('discount')
-  
-  const [selectedDiscount, setSelectedDiscount] = useState(discountParam || 'all')
+  const selectedDiscount = searchParams.get('discount') || 'all'
+  const selectedGender = searchParams.get('gender') || 'all'
 
   // Display products that are currently on sale.
   const saleProducts = products.filter(
@@ -22,6 +20,7 @@ function SaleContent() {
 
   // Discount filter
   const filteredProducts = saleProducts.filter((p) => {
+    if (selectedGender !== 'all' && p.gender !== selectedGender && p.gender !== 'unisex') return false
     if (selectedDiscount === 'all') return true
     const discount = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
     return discount >= parseInt(selectedDiscount)
@@ -34,8 +33,8 @@ function SaleContent() {
   }
 
   // Count products by category for stats
-  const menCount = filteredProducts.filter(p => p.category === 'tshirts' || p.category === 'hoodies').length
-  const womenCount = filteredProducts.filter(p => p.category === 'accessories').length
+  const menCount = saleProducts.filter(p => p.gender === 'men' || p.gender === 'unisex').length
+  const womenCount = saleProducts.filter(p => p.gender === 'women' || p.gender === 'unisex').length
 
   return (
     <div className="bg-white min-h-screen">
@@ -115,6 +114,8 @@ function SaleContent() {
           </div>
         </div>
 
+        <div className="mb-5 flex justify-center"><div className="grid grid-cols-3 rounded-full bg-gray-100 p-1 text-xs font-black uppercase tracking-wider">{[['all', 'All'], ['men', 'Men'], ['women', 'Women']].map(([value, label]) => <Link key={value} href={value === 'all' ? '/sale' : `/sale?gender=${value}`} className={`rounded-full px-6 py-2.5 text-center transition ${selectedGender === value ? 'bg-black text-white shadow-md' : 'text-gray-500 hover:text-black'}`}>{label}</Link>)}</div></div>
+
         {/* Filter Buttons */}
         <div className="flex flex-wrap gap-3 justify-center mb-8">
           {[
@@ -124,7 +125,7 @@ function SaleContent() {
           ].map((discount) => (
             <Link
               key={discount.value}
-              href={`/sale?discount=${discount.value}`}
+              href={`/sale?discount=${discount.value}${selectedGender !== 'all' ? `&gender=${selectedGender}` : ''}`}
               className={`px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest border-2 transition-all duration-300 ${
                 selectedDiscount === discount.value
                   ? 'bg-black text-white border-black shadow-lg scale-105'
@@ -142,7 +143,7 @@ function SaleContent() {
             {filteredProducts.length} Products Found
           </p>
           <span className="text-xs text-gray-400 uppercase tracking-widest">
-            {getDiscountLabel()}
+            {selectedGender === 'all' ? getDiscountLabel() : `${selectedGender} · ${getDiscountLabel()}`}
           </span>
         </div>
 
