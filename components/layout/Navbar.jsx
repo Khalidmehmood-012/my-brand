@@ -18,7 +18,6 @@ const baseNavLinks = [
   { label: 'Home', href: '/', columns: [], images: [] },
   { label: 'Women', href: '/collections/women-tshirts', ...megaMenuData.women },
   { label: 'Men', href: '/collections/tshirts', ...megaMenuData.men },
-  { label: 'Hoodies', href: '/collections/hoodies', ...megaMenuData.hoodies },
   { label: 'Accessories', href: '/collections/accessories', ...megaMenuData.accessories },
   { label: 'Sale', href: '/sale', ...megaMenuData.sale },
 ]
@@ -54,6 +53,7 @@ export default function Navbar() {
   const { user, logout, initAuth } = useAuthStore()
   const { products } = useProducts()
   const activeMenuItem = navLinks.find((item) => item.label === activeMenu)
+  const loginHref = `/login?returnTo=${encodeURIComponent(pathname || '/')}`
 
   useEffect(() => { void initAuth() }, [initAuth])
   useEffect(() => { const timeout = setTimeout(() => setWishlistMounted(true), 0); return () => clearTimeout(timeout) }, [])
@@ -187,7 +187,7 @@ export default function Navbar() {
             setSearchQuery('')
             setSearchResults([])
           }}
-          className="relative mx-auto flex h-17 max-w-7xl items-center justify-between px-4 sm:h-18"
+          className="relative mx-auto flex h-17 max-w-7xl min-w-0 items-center justify-between overflow-hidden px-3 sm:h-18 sm:px-4"
         >
           <button
             type="button"
@@ -204,7 +204,7 @@ export default function Navbar() {
           <Link
             href="/"
             onClick={() => setMobileOpen(false)}
-            className="absolute left-1/2 -translate-x-1/2 text-xl font-black uppercase tracking-[0.18em] text-black lg:left-4 lg:translate-x-0 lg:text-2xl"
+            className="absolute left-1/2 -translate-x-1/2 text-lg font-black uppercase tracking-[0.14em] text-black sm:text-xl sm:tracking-[0.18em] lg:left-4 lg:translate-x-0 lg:text-2xl"
           >
             Komrez<span className="text-gray-400">.</span>
           </Link>
@@ -234,14 +234,14 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div className="ml-auto flex items-center gap-0.5 sm:gap-1">
-            <NotificationBell user={user} />
-            <Link href="/wishlist" aria-label="Wishlist" className="relative flex h-10 w-10 items-center justify-center rounded-full text-black transition hover:bg-gray-100"><HeartIcon />{wishlistMounted && wishlistCount > 0 && <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-black px-1 text-[9px] font-black text-white">{wishlistCount}</span>}</Link>
+          <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
+            <div className="hidden lg:block"><NotificationBell user={user} /></div>
+            <Link href="/wishlist" aria-label="Wishlist" className="relative hidden h-10 w-10 items-center justify-center rounded-full text-black transition hover:bg-gray-100 lg:flex"><HeartIcon />{wishlistMounted && wishlistCount > 0 && <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-black px-1 text-[9px] font-black text-white">{wishlistCount}</span>}</Link>
             <button
               type="button"
               onClick={openSearch}
               aria-label="Search products"
-              className="flex h-10 w-10 items-center justify-center rounded-full text-black transition hover:bg-gray-100"
+              className="hidden h-10 w-10 items-center justify-center rounded-full text-black transition hover:bg-gray-100 lg:flex"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="h-5 w-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -249,7 +249,7 @@ export default function Navbar() {
             </button>
 
             {user ? (
-              <Link href="/profile" aria-label="My profile" className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-black transition hover:border-black hover:bg-black hover:text-white sm:h-10 sm:w-10">
+              <Link href="/profile" aria-label="My profile" className="hidden h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-black transition hover:border-black hover:bg-black hover:text-white sm:h-10 sm:w-10 lg:flex">
                 {user.photo ? (
                   <img src={user.photo} alt={user.name || 'Profile'} className="h-7 w-7 rounded-full border border-black object-cover" />
                 ) : (
@@ -257,7 +257,7 @@ export default function Navbar() {
                 )}
               </Link>
             ) : (
-              <Link href="/login" aria-label="Login" className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-black transition hover:border-black hover:bg-black hover:text-white sm:h-10 sm:w-10">
+              <Link href={loginHref} aria-label="Login" className="hidden h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-black transition hover:border-black hover:bg-black hover:text-white sm:h-10 sm:w-10 lg:flex">
                 <ProfileIcon />
               </Link>
             )}
@@ -294,6 +294,12 @@ export default function Navbar() {
           }`}
         >
           <div className="h-full overflow-y-auto overscroll-contain px-5 pb-8 pt-4">
+            <div className="mb-4 grid grid-cols-3 gap-2">
+              <button type="button" onClick={openSearch} className="flex min-w-0 flex-col items-center gap-1.5 rounded-xl bg-stone-50 px-2 py-3 text-[10px] font-black uppercase text-black"><SearchIcon />Search</button>
+              <Link href="/wishlist" onClick={() => setMobileOpen(false)} className="relative flex min-w-0 flex-col items-center gap-1.5 rounded-xl bg-stone-50 px-2 py-3 text-[10px] font-black uppercase text-black"><HeartIcon />Wishlist{wishlistMounted && wishlistCount > 0 && <span className="absolute right-2 top-2 rounded-full bg-black px-1.5 py-0.5 text-[8px] text-white">{wishlistCount}</span>}</Link>
+              <Link href={user ? '/profile' : loginHref} onClick={() => setMobileOpen(false)} className="flex min-w-0 flex-col items-center gap-1.5 rounded-xl bg-stone-50 px-2 py-3 text-[10px] font-black uppercase text-black"><ProfileIcon />{user ? 'Profile' : 'Login'}</Link>
+            </div>
+            {user && <div className="mb-4 flex items-center justify-between rounded-xl border border-gray-200 px-3 py-2"><span className="text-[10px] font-black uppercase text-gray-500">Notifications</span><NotificationBell user={user} /></div>}
             <div className="mb-3 flex items-center justify-between rounded-2xl bg-stone-50 px-4 py-3">
               <div>
                 <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-gray-400">Browse Komrez</p>
@@ -428,7 +434,7 @@ export default function Navbar() {
                   </button>
                 </div>
               ) : (
-                <Link href="/login" onClick={() => setMobileOpen(false)} className="flex items-center justify-between">
+                <Link href={loginHref} onClick={() => setMobileOpen(false)} className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-bold text-black">Login or create an account</p>
                     <p className="mt-1 text-xs text-gray-400">Track orders and checkout faster</p>
@@ -562,6 +568,14 @@ function ProfileIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="h-5 w-5">
       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+    </svg>
+  )
+}
+
+function SearchIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="h-5 w-5">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
     </svg>
   )
 }

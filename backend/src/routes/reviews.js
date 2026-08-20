@@ -21,10 +21,18 @@ router.post('/', authenticate, asyncHandler(async (request, response) => {
   if (!result.success) throw new AppError(422, 'VALIDATION_ERROR', 'Review data is invalid.', result.error.issues)
   const order = await Order.findOne({ _id: result.data.orderId, user: request.user.id, status: 'delivered' })
   const item = order?.items?.[result.data.itemIndex]
-  if (!order || !item?.product) throw new AppError(404, 'REVIEW_NOT_ALLOWED', 'Only delivered products can be reviewed.')
+  if (!order || !item || item.isCustom) throw new AppError(404, 'REVIEW_NOT_ALLOWED', 'Only delivered products can be reviewed.')
+  const legacyProductKeys = [
+    ...(item.productId ? [{ legacyId: item.productId }] : []),
+    ...(item.slug ? [{ slug: item.slug }] : []),
+  ]
+  const product = item.product
+    ? await Product.findById(item.product).select('_id')
+    : legacyProductKeys.length ? await Product.findOne({ $or: legacyProductKeys }).select('_id') : null
+  if (!product) throw new AppError(404, 'REVIEW_NOT_ALLOWED', 'The delivered product could not be found.')
   const exists = await Review.exists({ order: order.id, itemIndex: result.data.itemIndex, user: request.user.id })
   if (exists) throw new AppError(409, 'REVIEW_EXISTS', 'You have already reviewed this product from this order.')
-  const review = await Review.create({ ...result.data, order: order.id, product: item.product, user: request.user.id, customerName: request.user.name })
+  const review = await Review.create({ ...result.data, order: order.id, product: product.id, user: request.user.id, customerName: request.user.name })
   return success(response, review, 201)
 }))
 

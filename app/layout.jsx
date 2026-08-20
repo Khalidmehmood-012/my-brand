@@ -14,11 +14,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning><ToastProvider>
-        <Suspense fallback={null}><RouteLoader /></Suspense>
-        {/* <AnnouncementBar /> */}
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <div className="flex min-h-dvh flex-col">
+          <Suspense fallback={null}><RouteLoader /></Suspense>
+          {/* <AnnouncementBar /> */}
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </div>
       </ToastProvider></body>
     </html>
   )

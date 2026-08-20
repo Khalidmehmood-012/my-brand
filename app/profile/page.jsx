@@ -23,7 +23,7 @@ export default function ProfilePage() {
   const [reviewing, setReviewing] = useState(false)
   const fileRef = useRef(null)
 
-  useEffect(() => { if (!loading && !user) router.replace('/login') }, [loading, user, router])
+  useEffect(() => { if (!loading && !user) router.replace('/login?returnTo=/profile') }, [loading, user, router])
   useEffect(() => { if (!user) return; const timeout = setTimeout(() => setProfile({ name: user.name || '', phone: user.phone || '' }), 0); backendRequest('/orders/mine?limit=100', { headers: authHeaders() }).then(({ data }) => setOrders(data)).catch((error) => toast('error', error.message, 'Unable to load account')); return () => clearTimeout(timeout) }, [user])
 
   if (loading || !user) return <div className="flex min-h-screen items-center justify-center bg-white"><span className="h-12 w-12 animate-spin rounded-full border-2 border-gray-200 border-t-black" /></div>

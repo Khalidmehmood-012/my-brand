@@ -12,7 +12,11 @@ export default function LoginPage() {
   const [isRegister, setIsRegister] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', password: '' })
   const [loading, setLoading] = useState(false)
-  const destination = () => { if (typeof window === 'undefined') return '/profile'; const value = new URLSearchParams(window.location.search).get('returnTo'); return value?.startsWith('/') ? value : '/profile' }
+  const destination = () => {
+    if (typeof window === 'undefined') return '/'
+    const value = new URLSearchParams(window.location.search).get('returnTo')
+    return value?.startsWith('/') && !value.startsWith('//') ? value : '/'
+  }
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -30,7 +34,7 @@ export default function LoginPage() {
       } else {
         await loginWithEmail(form.email, form.password)
       }
-      router.push(destination())
+      router.replace(destination())
     } catch (err) {
       toast('error', err.message.includes('invalid') ? 'Invalid email or password' : err.message, isRegister ? 'Signup failed' : 'Login failed')
     }
@@ -41,7 +45,7 @@ export default function LoginPage() {
     setLoading(true)
     try {
       await loginWithGoogle()
-      router.push(destination())
+      router.replace(destination())
     } catch (err) {
       toast('error', 'Google login failed. Please try again.', 'Google login failed')
     }
@@ -164,7 +168,6 @@ export default function LoginPage() {
           <button
             onClick={() => {
               setIsRegister(!isRegister)
-              setError('')
               setForm({ name: '', email: '', password: '' })
             }}
             className="text-black font-bold hover:underline"
