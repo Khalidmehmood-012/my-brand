@@ -8,7 +8,7 @@ export function toast(type, message, title) {
 
 export default function ToastProvider({ children }) {
   const [items, setItems] = useState([])
-  useEffect(() => { const listener = (event) => { const item = { id: crypto.randomUUID(), ...event.detail }; setItems((current) => [...current, item]); setTimeout(() => setItems((current) => current.filter((entry) => entry.id !== item.id)), 4200) }; window.addEventListener('komrez-toast', listener); return () => window.removeEventListener('komrez-toast', listener) }, [])
+  useEffect(() => { const listener = (event) => { const item = { id: crypto.randomUUID(), ...event.detail }; setItems((current) => current.some((entry) => entry.type === item.type && entry.title === item.title && entry.message === item.message) ? current : [...current, item]); setTimeout(() => setItems((current) => current.filter((entry) => entry.id !== item.id)), 4200) }; window.addEventListener('komrez-toast', listener); return () => window.removeEventListener('komrez-toast', listener) }, [])
   const remove = (id) => setItems((current) => current.filter((item) => item.id !== id))
   return <>{children}<div className="pointer-events-none fixed inset-x-3 top-4 z-120 flex flex-col items-end gap-3 sm:left-auto sm:right-5 sm:w-96">{items.map((item) => <Toast key={item.id} item={item} remove={remove} />)}</div></>
 }
