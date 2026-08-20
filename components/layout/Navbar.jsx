@@ -187,7 +187,7 @@ export default function Navbar() {
             setSearchQuery('')
             setSearchResults([])
           }}
-          className="relative mx-auto flex h-17 max-w-7xl min-w-0 items-center justify-between overflow-hidden px-3 sm:h-18 sm:px-4"
+          className="relative mx-auto flex h-17 max-w-7xl min-w-0 items-center justify-between overflow-visible px-3 sm:h-18 sm:px-4"
         >
           <button
             type="button"
@@ -235,7 +235,7 @@ export default function Navbar() {
           </div>
 
           <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
-            <div className="hidden lg:block"><NotificationBell user={user} /></div>
+            <NotificationBell user={user} />
             <Link href="/wishlist" aria-label="Wishlist" className="relative hidden h-10 w-10 items-center justify-center rounded-full text-black transition hover:bg-gray-100 lg:flex"><HeartIcon />{wishlistMounted && wishlistCount > 0 && <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-black px-1 text-[9px] font-black text-white">{wishlistCount}</span>}</Link>
             <button
               type="button"
@@ -299,7 +299,6 @@ export default function Navbar() {
               <Link href="/wishlist" onClick={() => setMobileOpen(false)} className="relative flex min-w-0 flex-col items-center gap-1.5 rounded-xl bg-stone-50 px-2 py-3 text-[10px] font-black uppercase text-black"><HeartIcon />Wishlist{wishlistMounted && wishlistCount > 0 && <span className="absolute right-2 top-2 rounded-full bg-black px-1.5 py-0.5 text-[8px] text-white">{wishlistCount}</span>}</Link>
               <Link href={user ? '/profile' : loginHref} onClick={() => setMobileOpen(false)} className="flex min-w-0 flex-col items-center gap-1.5 rounded-xl bg-stone-50 px-2 py-3 text-[10px] font-black uppercase text-black"><ProfileIcon />{user ? 'Profile' : 'Login'}</Link>
             </div>
-            {user && <div className="mb-4 flex items-center justify-between rounded-xl border border-gray-200 px-3 py-2"><span className="text-[10px] font-black uppercase text-gray-500">Notifications</span><NotificationBell user={user} /></div>}
             <div className="mb-3 flex items-center justify-between rounded-2xl bg-stone-50 px-4 py-3">
               <div>
                 <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-gray-400">Browse Komrez</p>

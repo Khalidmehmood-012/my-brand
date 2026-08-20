@@ -16,6 +16,7 @@ coverage/
 
 # next.js (storefront and admin)
 .next/
+.next-dev/
 out/
 
 # production output

@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import crypto from 'node:crypto'
 import { z } from 'zod'
 import User from '../models/User.js'
 import { env } from '../config/env.js'
@@ -12,6 +13,7 @@ const router = Router()
 const loginSchema = z.object({
   email: z.email(),
   password: z.string().min(8).max(128),
+  context: z.enum(['storefront', 'admin']).optional().default('storefront'),
 })
 
 const registerSchema = loginSchema.extend({
@@ -30,8 +32,23 @@ function validate(schema, input) {
   return result.data
 }
 
-function createToken(user) {
-  return jwt.sign({ sub: user.id, role: user.role }, env.jwtSecret, { expiresIn: env.jwtExpiresIn })
+function deviceDetails(request) {
+  const ua = request.get('user-agent') || ''
+  const browser = /Edg\//.test(ua) ? 'Microsoft Edge' : /Chrome\//.test(ua) ? 'Chrome' : /Firefox\//.test(ua) ? 'Firefox' : /Safari\//.test(ua) ? 'Safari' : 'Unknown browser'
+  const device = /iPhone/.test(ua) ? 'iPhone' : /iPad/.test(ua) ? 'iPad' : /Android/.test(ua) ? 'Android device' : /Macintosh/.test(ua) ? 'Mac' : /Windows/.test(ua) ? 'Windows PC' : /Linux/.test(ua) ? 'Linux device' : 'Unknown device'
+  return { browser, device, ipAddress: String(request.headers['x-forwarded-for'] || request.ip || '').split(',')[0].trim() }
+}
+
+export async function createSession(user, request, context = 'storefront') {
+  if (context === 'admin' && !['admin', 'staff'].includes(user.role)) throw new AppError(403, 'ADMIN_ACCESS_REQUIRED', 'Admin access is required.')
+  const sessionId = crypto.randomUUID()
+  const token = jwt.sign({ sub: user.id, role: user.role, sid: sessionId, context }, env.jwtSecret, { expiresIn: env.jwtExpiresIn })
+  const { exp } = jwt.decode(token)
+  user.sessions.push({ sessionId, context, ...deviceDetails(request), expiresAt: new Date(exp * 1000) })
+  if (user.sessions.length > 50) user.sessions = user.sessions.slice(-50)
+  user.lastLoginAt = new Date()
+  await user.save()
+  return token
 }
 
 router.post('/register', asyncHandler(async (request, response) => {
@@ -46,7 +63,7 @@ router.post('/register', asyncHandler(async (request, response) => {
     role: 'customer',
   })
 
-  return success(response, { user, token: createToken(user) }, 201)
+  return success(response, { user, token: await createSession(user, request, input.context) }, 201)
 }))
 
 router.post('/login', asyncHandler(async (request, response) => {
@@ -57,10 +74,8 @@ router.post('/login', asyncHandler(async (request, response) => {
   }
   if (!user.isActive) throw new AppError(403, 'ACCOUNT_DISABLED', 'This account has been disabled.')
 
-  user.lastLoginAt = new Date()
-  await user.save()
   user.passwordHash = undefined
-  return success(response, { user, token: createToken(user) })
+  return success(response, { user, token: await createSession(user, request, input.context) })
 }))
 
 router.post('/firebase', asyncHandler(async (request, response) => {
@@ -78,12 +93,44 @@ router.post('/firebase', asyncHandler(async (request, response) => {
   if (!user) user = new User({ email: identity.email, name: identity.displayName || provider.displayName || identity.email.split('@')[0], role: 'customer' })
   user.firebaseUid = identity.localId
   user.photo = identity.photoUrl || provider.photoUrl || user.photo
-  user.lastLoginAt = new Date()
-  await user.save()
-  return success(response, { user, token: createToken(user) })
+  return success(response, { user, token: await createSession(user, request, 'storefront') })
 }))
 
 router.get('/me', authenticate, asyncHandler(async (request, response) => success(response, request.user)))
+
+router.get('/sessions', authenticate, asyncHandler(async (request, response) => {
+  const now = new Date()
+  const sessions = [...(request.user.sessions || [])].sort((a, b) => b.createdAt - a.createdAt).map((session) => ({
+    _id: session._id,
+    context: session.context,
+    device: session.device,
+    browser: session.browser,
+    ipAddress: session.ipAddress,
+    createdAt: session.createdAt,
+    lastSeenAt: session.lastSeenAt,
+    expiresAt: session.expiresAt,
+    loggedOutAt: session.loggedOutAt,
+    isCurrent: session.sessionId === request.authTokenPayload?.sid,
+    isActive: !session.loggedOutAt && (!session.expiresAt || session.expiresAt > now),
+  }))
+  return success(response, sessions)
+}))
+
+router.delete('/sessions/:id', authenticate, asyncHandler(async (request, response) => {
+  const session = request.user.sessions.id(request.params.id)
+  if (!session) throw new AppError(404, 'SESSION_NOT_FOUND', 'Login session was not found.')
+  if (!session.loggedOutAt) session.loggedOutAt = new Date()
+  await request.user.save()
+  return success(response, { loggedOut: true, isCurrent: session.sessionId === request.authTokenPayload?.sid })
+}))
+
+router.post('/logout', authenticate, asyncHandler(async (request, response) => {
+  if (request.authSession && !request.authSession.loggedOutAt) {
+    request.authSession.loggedOutAt = new Date()
+    await request.user.save()
+  }
+  return success(response, { loggedOut: true })
+}))
 
 router.patch('/profile', authenticate, asyncHandler(async (request, response) => {
   const input = validate(z.object({ name: z.string().trim().min(2).max(100), phone: z.string().trim().max(30).optional().default(''), photo: z.string().url().or(z.literal('')).optional() }), request.body)

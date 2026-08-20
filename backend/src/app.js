@@ -43,11 +43,9 @@ if (env.nodeEnv !== 'test') app.use(morgan(env.nodeEnv === 'production' ? 'combi
 app.use('/api', rateLimit({ windowMs: 15 * 60 * 1000, limit: 500, standardHeaders: 'draft-8', legacyHeaders: false }))
 app.use('/api/auth', rateLimit({ windowMs: 15 * 60 * 1000, limit: 50, standardHeaders: 'draft-8', legacyHeaders: false }))
 
-app.get('/', (_request, response) => success(response, {
-  service: 'komrez-api',
-  status: 'ok',
-  health: '/api/health',
-}))
+app.get('/', (_request, response) => {
+  response.status(200).type('html').send('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Komrez API</title></head><body><main><h1>Komrez API</h1><p>Service is running.</p><a href="/api/health">API health</a></main></body></html>')
+})
 app.get('/api', (_request, response) => success(response, {
   service: 'komrez-api',
   status: 'ok',

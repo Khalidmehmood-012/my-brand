@@ -321,9 +321,10 @@ Public. Returns the `store`, `payments` and `hero` settings plus active categori
 ## Notification endpoints
 
 - `GET /notifications` — authenticated customer/admin notification list and unread count.
-- `PATCH /notifications/read-all` — mark the signed-in user's relevant notifications as read.
-- `PATCH /notifications/:id/read` — mark only the opened notification as read; other unread notifications remain highlighted.
-- `GET /notifications/stream?token=...` — authenticated server-sent event stream for instant notifications; no repeated list polling is required.
+- `WebSocket /api/socket.io` — authenticated live notification delivery, initial state synchronization, and read-state events without notification polling.
+- `GET /notifications/push/public-key` — Web Push public key and configuration status.
+- `POST /notifications/push/subscribe` — save the current browser push subscription.
+- `DELETE /notifications/push/subscribe` — remove the current browser push subscription.
 
 ## Review endpoints
 

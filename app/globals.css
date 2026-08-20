@@ -40,3 +40,11 @@ html, body { min-height: 100%; max-width: 100%; overflow-x: clip; }
   50% { transform: translateX(110%); }
   100% { transform: translateX(230%); }
 }
+
+[data-notification-bell] > div {
+  border: 1px solid rgb(17 24 39 / .1);
+  box-shadow: 0 24px 70px rgb(17 24 39 / .22);
+}
+[data-notification-bell] > div > div:first-child { background: linear-gradient(135deg, #111827, #030712); color: white; }
+[data-notification-bell] > div > div:first-child * { color: inherit; }
+[data-notification-bell] > div > div:last-child > a { margin: .45rem .55rem; border: 0; border-radius: 1rem; }

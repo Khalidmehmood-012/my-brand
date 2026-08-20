@@ -14,6 +14,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning><ToastProvider>
+        <style>{`#__initial-loader{position:fixed;inset:0;z-index:9999;background:#fff;display:flex;align-items:center;justify-content:center}`}</style>
         <div className="flex min-h-dvh flex-col">
           <Suspense fallback={null}><RouteLoader /></Suspense>
           {/* <AnnouncementBar /> */}

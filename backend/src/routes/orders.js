@@ -1,18 +1,27 @@
 import { Router } from 'express'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
 import Order, { statusValues } from '../models/Order.js'
 import Product from '../models/Product.js'
 import User from '../models/User.js'
 import { createNotification } from '../services/notifications.js'
-import { env } from '../config/env.js'
+import { createSession } from './auth.js'
 import { authenticate, authorize, optionalAuthenticate } from '../middleware/auth.js'
 import { AppError, asyncHandler, pagination, success } from '../utils/api.js'
 import Setting from '../models/Setting.js'
 import { pakistanLocations, shippingFor } from '../data/pakistan-locations.js'
 
 const router = Router()
+
+async function ensureOrderUser(order) {
+  if (order.user) return order.user
+  if (!order.customer?.email) return null
+  const user = await User.findOne({ email: order.customer.email.toLowerCase() }).select('_id')
+  if (!user) return null
+  order.user = user.id
+  await order.save()
+  return user.id
+}
 
 const createSchema = z.object({
   firebaseUid: z.string().optional().default(''),
@@ -71,7 +80,7 @@ router.post('/', optionalAuthenticate, asyncHandler(async (request, response) =>
     } else {
       user = await User.create({ name: input.customer.name, email: input.customer.email, phone: input.customer.phone, passwordHash: await bcrypt.hash(input.password, 12), role: 'customer' })
     }
-    authToken = jwt.sign({ sub: user.id, role: user.role }, env.jwtSecret, { expiresIn: env.jwtExpiresIn })
+    authToken = await createSession(user, request, 'storefront')
   }
   if (input.paymentMethod !== 'cod' && !input.paymentProof) throw new AppError(422, 'PAYMENT_PROOF_REQUIRED', 'Upload a payment screenshot before placing this order.')
   if (input.saveAddress && user) {
@@ -100,6 +109,7 @@ router.post('/', optionalAuthenticate, asyncHandler(async (request, response) =>
   await Promise.all(updatedProducts.filter((product) => product && product.stock <= 5).map((product) => createNotification({ recipientRole: 'admin', title: 'Low stock alert', message: `${product.name} has only ${product.stock} unit${product.stock === 1 ? '' : 's'} left.`, type: 'inventory', link: '/products' })))
 
   await createNotification({ recipientRole: 'admin', title: 'New order received', message: `${order.orderNumber} was placed by ${order.customer.name}.`, type: 'order', link: '/orders' })
+  if (user) await createNotification({ user: user.id, recipientRole: 'customer', title: 'Order placed successfully', message: `${order.orderNumber} has been received and is currently pending confirmation.`, type: 'order', link: '/profile' })
 
   return success(response, { ...order.toJSON(), ...(authToken ? { authToken } : {}), ...(user ? { account: user.toJSON() } : {}) }, 201)
 }))
@@ -161,9 +171,10 @@ router.patch('/:id/status', authenticate, authorize('admin', 'staff'), asyncHand
   order.status = result.data.status
   order.statusHistory.push({ ...result.data, changedBy: request.user.id })
   await order.save()
-  if (order.user) await createNotification({ user: order.user, recipientRole: 'customer', title: 'Order status updated', message: `${order.orderNumber} is now ${result.data.status.replaceAll('-', ' ')}.`, type: 'order', link: '/profile' })
-  if (order.user && result.data.status === 'delivered' && previousStatus !== 'delivered') {
-    await createNotification({ user: order.user, recipientRole: 'customer', title: 'How was your order?', message: `${order.orderNumber} has been delivered. Review your products to help other customers shop confidently.`, type: 'order', link: `/profile?review=${order.id}` })
+  const customerUser = await ensureOrderUser(order)
+  if (customerUser) await createNotification({ user: customerUser, recipientRole: 'customer', title: 'Order status updated', message: `${order.orderNumber} is now ${result.data.status.replaceAll('-', ' ')}.`, type: 'order', link: '/profile' })
+  if (customerUser && result.data.status === 'delivered' && previousStatus !== 'delivered') {
+    await createNotification({ user: customerUser, recipientRole: 'customer', title: 'How was your order?', message: `${order.orderNumber} has been delivered. Review your products to help other customers shop confidently.`, type: 'order', link: `/profile?review=${order.id}` })
   }
   return success(response, order)
 }))
@@ -186,7 +197,8 @@ router.patch('/:id/payment', authenticate, authorize('admin', 'staff'), asyncHan
     await Promise.all(order.items.filter((item) => item.product).map((item) => Product.findByIdAndUpdate(item.product, { $inc: { stock: item.quantity } })))
   }
   await order.save()
-  if (order.user) await createNotification({ user: order.user, recipientRole: 'customer', title: 'Payment reviewed', message: `Payment for ${order.orderNumber} was marked ${result.data.paymentStatus}.`, type: 'payment', link: '/profile' })
+  const customerUser = await ensureOrderUser(order)
+  if (customerUser) await createNotification({ user: customerUser, recipientRole: 'customer', title: 'Payment reviewed', message: `Payment for ${order.orderNumber} was marked ${result.data.paymentStatus}.`, type: 'payment', link: '/profile' })
   return success(response, order)
 }))
 

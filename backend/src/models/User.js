@@ -21,11 +21,23 @@ const userSchema = new mongoose.Schema({
   totalOrders: { type: Number, default: 0, min: 0 },
   totalSpent: { type: Number, default: 0, min: 0 },
   lastLoginAt: Date,
+  sessions: [{
+    sessionId: { type: String, required: true },
+    context: { type: String, enum: ['storefront', 'admin'], default: 'storefront' },
+    device: { type: String, default: 'Unknown device' },
+    browser: { type: String, default: 'Unknown browser' },
+    ipAddress: { type: String, default: '' },
+    createdAt: { type: Date, default: Date.now },
+    lastSeenAt: { type: Date, default: Date.now },
+    expiresAt: Date,
+    loggedOutAt: Date,
+  }],
 }, { timestamps: true })
 
 userSchema.set('toJSON', {
   transform(_document, object) {
     delete object.passwordHash
+    delete object.sessions
     return object
   },
 })

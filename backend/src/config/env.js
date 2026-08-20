@@ -20,4 +20,7 @@ export const env = {
   adminEmail: process.env.ADMIN_EMAIL || 'admin@komrez.com',
   adminPassword: process.env.ADMIN_PASSWORD || 'ChangeMe123!',
   firebaseApiKey: process.env.FIREBASE_API_KEY || '',
+  vapidPublicKey: process.env.VAPID_PUBLIC_KEY || '',
+  vapidPrivateKey: process.env.VAPID_PRIVATE_KEY || '',
+  vapidSubject: process.env.VAPID_SUBJECT || 'mailto:admin@komrez.com',
 }

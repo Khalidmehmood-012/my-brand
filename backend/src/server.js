@@ -1,6 +1,8 @@
 import app from './app.js'
 import { connectDatabase, disconnectDatabase } from './config/database.js'
 import { env } from './config/env.js'
+import { createServer } from 'node:http'
+import { attachNotificationSocket } from './realtime/notificationSocket.js'
 
 let server
 let databaseRetryTimer
@@ -19,7 +21,9 @@ function start() {
   // Start HTTP immediately. On cPanel/Passenger, waiting for MongoDB before
   // listen() makes the entire application appear as a generic 503 page when
   // Atlas networking or credentials need attention.
-  server = app.listen(env.port, () => {
+  server = createServer(app)
+  attachNotificationSocket(server)
+  server.listen(env.port, () => {
     console.log(`Komrez API running at http://localhost:${env.port}`)
   })
   void connectWithRetry()
